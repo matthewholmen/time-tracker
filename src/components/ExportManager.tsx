@@ -69,89 +69,100 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects }) => {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-semibold text-gray-800">Export Data</h2>
-        <div className="flex items-center space-x-2 text-sm text-gray-600">
-          <Calendar size={16} />
-          <span>{new Date().toLocaleDateString()}</span>
+    <div className="glass rounded-3xl shadow-glass p-8 animate-fade-in">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-2xl font-bold text-slate-800">Export Data</h2>
+        <div className="flex items-center space-x-3 text-slate-600">
+          <div className="p-2 glass rounded-xl">
+            <Calendar size={18} />
+          </div>
+          <span className="font-medium">{new Date().toLocaleDateString()}</span>
         </div>
       </div>
 
       {/* Export Summary */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-blue-50 p-4 rounded-lg">
-          <div className="flex items-center space-x-2 text-blue-800 mb-2">
-            <FileText size={18} />
-            <span className="font-medium">Total Sessions</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 text-primary-600 mb-3">
+            <div className="p-2 bg-primary-100 rounded-xl">
+              <FileText size={20} />
+            </div>
+            <span className="font-semibold">Total Sessions</span>
           </div>
-          <p className="text-2xl font-bold text-blue-900">{totalSessions}</p>
+          <p className="text-3xl font-bold text-slate-800">{totalSessions}</p>
         </div>
-        <div className="bg-green-50 p-4 rounded-lg">
-          <div className="flex items-center space-x-2 text-green-800 mb-2">
-            <BarChart3 size={18} />
-            <span className="font-medium">Total Time</span>
+        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 text-accent-cyan mb-3">
+            <div className="p-2 bg-cyan-100 rounded-xl">
+              <BarChart3 size={20} />
+            </div>
+            <span className="font-semibold">Total Time</span>
           </div>
-          <p className="text-2xl font-bold text-green-900">{formatTime(totalTime)}</p>
+          <p className="text-3xl font-bold text-slate-800">{formatTime(totalTime)}</p>
         </div>
-        <div className="bg-purple-50 p-4 rounded-lg">
-          <div className="flex items-center space-x-2 text-purple-800 mb-2">
-            <Download size={18} />
-            <span className="font-medium">Total Earnings</span>
+        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 text-accent-emerald mb-3">
+            <div className="p-2 bg-emerald-100 rounded-xl">
+              <Download size={20} />
+            </div>
+            <span className="font-semibold">Total Earnings</span>
           </div>
-          <p className="text-2xl font-bold text-purple-900">${totalEarnings.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-slate-800">${totalEarnings.toFixed(2)}</p>
         </div>
       </div>
 
       {/* Export Options */}
-      <div className="space-y-4">
-        <h3 className="text-lg font-medium text-gray-800 mb-3">Export Options</h3>
+      <div className="space-y-6">
+        <h3 className="text-xl font-bold text-slate-800 mb-6 flex items-center">
+          <div className="w-2 h-2 bg-gradient-primary rounded-full mr-3"></div>
+          Export Options
+        </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Detailed Time Blocks Export */}
-          <div className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <FileText size={20} className="text-blue-600" />
+          <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="p-3 bg-gradient-primary rounded-2xl">
+                <FileText size={24} className="text-white" />
               </div>
               <div>
-                <h4 className="font-medium text-gray-800">Detailed Sessions</h4>
-                <p className="text-sm text-gray-600">All time blocks with timestamps</p>
+                <h4 className="text-lg font-bold text-slate-800">Detailed Sessions</h4>
+                <p className="text-sm text-slate-600">All time blocks with timestamps</p>
               </div>
             </div>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-slate-600 mb-6 leading-relaxed">
               Exports a detailed CSV with every time tracking session including start/end times, duration, and earnings.
             </p>
             <button
               onClick={handleExportTimeBlocks}
               disabled={isExporting}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white rounded-lg transition-colors"
+              className="w-full group flex items-center justify-center space-x-3 px-6 py-4 bg-gradient-primary hover:shadow-elevated disabled:opacity-50 text-white rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
             >
-              <Download size={16} />
+              <Download size={18} className="group-hover:animate-bounce" />
               <span>{isExporting ? 'Exporting...' : 'Export Sessions'}</span>
             </button>
           </div>
 
           {/* Project Summary Export */}
-          <div className="border border-gray-200 rounded-lg p-4">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <BarChart3 size={20} className="text-green-600" />
+          <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+            <div className="flex items-center space-x-4 mb-4">
+              <div className="p-3 bg-gradient-success rounded-2xl">
+                <BarChart3 size={24} className="text-white" />
               </div>
               <div>
-                <h4 className="font-medium text-gray-800">Project Summary</h4>
-                <p className="text-sm text-gray-600">Aggregated project statistics</p>
+                <h4 className="text-lg font-bold text-slate-800">Project Summary</h4>
+                <p className="text-sm text-slate-600">Aggregated project statistics</p>
               </div>
             </div>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-slate-600 mb-6 leading-relaxed">
               Exports a summary CSV with total time, earnings, and statistics for each project.
             </p>
             <button
               onClick={handleExportProjectSummary}
               disabled={isExporting}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-300 text-white rounded-lg transition-colors"
+              className="w-full group flex items-center justify-center space-x-3 px-6 py-4 bg-gradient-success hover:shadow-elevated disabled:opacity-50 text-white rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
             >
-              <Download size={16} />
+              <Download size={18} className="group-hover:animate-bounce" />
               <span>{isExporting ? 'Exporting...' : 'Export Summary'}</span>
             </button>
           </div>
@@ -159,25 +170,52 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects }) => {
       </div>
 
       {/* Export Format Info */}
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-        <h4 className="font-medium text-gray-800 mb-2">Export Format</h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-          <div>
-            <p className="font-medium mb-1">Detailed Sessions includes:</p>
-            <ul className="space-y-1">
-              <li>• Project name</li>
-              <li>• Start and end timestamps</li>
-              <li>• Duration (hours and formatted time)</li>
-              <li>• Hourly rate and earnings</li>
+      <div className="mt-8 glass rounded-2xl p-6">
+        <h4 className="text-lg font-bold text-slate-800 mb-4 flex items-center">
+          <div className="w-2 h-2 bg-gradient-warning rounded-full mr-3"></div>
+          Export Format Details
+        </h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600">
+          <div className="space-y-3">
+            <p className="font-semibold text-slate-700 text-base">Detailed Sessions includes:</p>
+            <ul className="space-y-2">
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-primary-400 rounded-full"></div>
+                <span>Project name</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-primary-400 rounded-full"></div>
+                <span>Start and end timestamps</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-primary-400 rounded-full"></div>
+                <span>Duration (hours and formatted time)</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-primary-400 rounded-full"></div>
+                <span>Hourly rate and earnings</span>
+              </li>
             </ul>
           </div>
-          <div>
-            <p className="font-medium mb-1">Project Summary includes:</p>
-            <ul className="space-y-1">
-              <li>• Project name and rate</li>
-              <li>• Total time and sessions</li>
-              <li>• Total earnings</li>
-              <li>• Average session length</li>
+          <div className="space-y-3">
+            <p className="font-semibold text-slate-700 text-base">Project Summary includes:</p>
+            <ul className="space-y-2">
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-accent-emerald rounded-full"></div>
+                <span>Project name and rate</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-accent-emerald rounded-full"></div>
+                <span>Total time and sessions</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-accent-emerald rounded-full"></div>
+                <span>Total earnings</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <div className="w-1.5 h-1.5 bg-accent-emerald rounded-full"></div>
+                <span>Average session length</span>
+              </li>
             </ul>
           </div>
         </div>

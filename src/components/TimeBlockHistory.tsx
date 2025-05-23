@@ -93,40 +93,46 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800">Session History</h2>
+    <div className="glass rounded-3xl shadow-glass p-8 mb-12 animate-fade-in">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-2xl font-bold text-slate-800">Session History</h2>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center space-x-2 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+          className="flex items-center space-x-3 px-6 py-3 glass hover:shadow-soft rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold text-slate-700"
         >
-          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
           <span>{isExpanded ? 'Collapse' : 'Expand'}</span>
         </button>
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <div className="bg-blue-50 p-3 rounded-lg">
-          <div className="flex items-center space-x-2 text-blue-800">
-            <Calendar size={16} />
-            <span className="text-sm font-medium">Total Sessions</span>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 text-primary-600 mb-3">
+            <div className="p-2 bg-primary-100 rounded-xl">
+              <Calendar size={20} />
+            </div>
+            <span className="font-semibold">Total Sessions</span>
           </div>
-          <p className="text-lg font-bold text-blue-900">{totalSessions}</p>
+          <p className="text-3xl font-bold text-slate-800">{totalSessions}</p>
         </div>
-        <div className="bg-green-50 p-3 rounded-lg">
-          <div className="flex items-center space-x-2 text-green-800">
-            <Clock size={16} />
-            <span className="text-sm font-medium">Total Time</span>
+        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 text-accent-cyan mb-3">
+            <div className="p-2 bg-cyan-100 rounded-xl">
+              <Clock size={20} />
+            </div>
+            <span className="font-semibold">Total Time</span>
           </div>
-          <p className="text-lg font-bold text-green-900">{formatTime(totalTime)}</p>
+          <p className="text-3xl font-bold text-slate-800">{formatTime(totalTime)}</p>
         </div>
-        <div className="bg-purple-50 p-3 rounded-lg">
-          <div className="flex items-center space-x-2 text-purple-800">
-            <DollarSign size={16} />
-            <span className="text-sm font-medium">Total Earnings</span>
+        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 text-accent-emerald mb-3">
+            <div className="p-2 bg-emerald-100 rounded-xl">
+              <DollarSign size={20} />
+            </div>
+            <span className="font-semibold">Total Earnings</span>
           </div>
-          <p className="text-lg font-bold text-purple-900">${totalEarnings.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-slate-800">${totalEarnings.toFixed(2)}</p>
         </div>
       </div>
 
@@ -134,14 +140,14 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
         <>
           {/* Filter Dropdown */}
           {projects.length > 1 && (
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+            <div className="mb-6">
+              <label className="block text-sm font-bold text-slate-700 mb-3">
                 Filter by Project:
               </label>
               <select
                 value={selectedProject}
                 onChange={(e) => setSelectedProject(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
               >
                 <option value="all">All Projects</option>
                 {projects.map(project => (
@@ -154,43 +160,49 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
           )}
 
           {/* Time Blocks List */}
-          <div className="space-y-4 max-h-96 overflow-y-auto">
+          <div className="space-y-6 max-h-96 overflow-y-auto">
             {totalSessions === 0 ? (
-              <p className="text-gray-500 text-center py-4">
-                No time sessions recorded yet. Start tracking to see your history!
-              </p>
+              <div className="text-center py-12">
+                <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center">
+                  <Clock size={32} className="text-slate-500" />
+                </div>
+                <p className="text-slate-500 text-lg font-medium">
+                  No time sessions recorded yet. Start tracking to see your history!
+                </p>
+              </div>
             ) : (
               Object.entries(groupedBlocks).map(([date, blocks]) => (
-                <div key={date} className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-medium text-gray-800 mb-3 border-b border-gray-100 pb-2">
+                <div key={date} className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300">
+                  <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                    <div className="w-2 h-2 bg-gradient-primary rounded-full mr-3"></div>
                     {date}
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {blocks.map(block => (
                       <div 
                         key={block.id} 
-                        className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                        className="flex justify-between items-center p-4 glass rounded-xl hover:shadow-soft transition-all duration-300"
                       >
                         <div>
-                          <p className="font-medium text-gray-800">{block.projectName}</p>
-                          <p className="text-sm text-gray-600">
+                          <p className="font-bold text-slate-800 mb-1">{block.projectName}</p>
+                          <p className="text-sm text-slate-600">
                             {formatDateTime(new Date(block.startTime))} - {formatDateTime(new Date(block.endTime))}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-medium text-gray-800">{formatTime(block.duration)}</p>
-                          <p className="text-sm text-green-600 font-medium">${block.earnings.toFixed(2)}</p>
-                          <p className="text-xs text-gray-500">${block.rate}/hr</p>
+                          <p className="font-bold text-slate-800">{formatTime(block.duration)}</p>
+                          <p className="text-sm text-accent-emerald font-bold">${block.earnings.toFixed(2)}</p>
+                          <p className="text-xs text-slate-500">${block.rate}/hr</p>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-3 pt-2 border-t border-gray-100">
-                    <div className="flex justify-between text-sm font-medium text-gray-700">
+                  <div className="mt-4 pt-4 border-t border-white/20">
+                    <div className="flex justify-between text-sm font-bold text-slate-700">
                       <span>Day Total:</span>
-                      <span>
-                        {formatTime(blocks.reduce((sum, b) => sum + b.duration, 0))} • 
-                        ${blocks.reduce((sum, b) => sum + b.earnings, 0).toFixed(2)}
+                      <span className="text-right">
+                        <div>{formatTime(blocks.reduce((sum, b) => sum + b.duration, 0))}</div>
+                        <div className="text-accent-emerald">${blocks.reduce((sum, b) => sum + b.earnings, 0).toFixed(2)}</div>
                       </span>
                     </div>
                   </div>

@@ -232,15 +232,28 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
               ) : (
                 <>
                   <div 
-                    className="p-3 cursor-pointer"
+                    className="p-6 cursor-pointer"
                     onClick={() => onProjectSelect(project)}
                   >
                     <div className="flex justify-between items-center">
                       <div className="flex-1">
-                        <h3 className="font-medium text-gray-800">{project.name}</h3>
-                        <p className="text-sm text-gray-600">
-                          ${project.rate}/hour • {formatTime(project.totalTime)} tracked • ${project.totalEarnings.toFixed(2)} earned
-                        </p>
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h3 className="text-lg font-bold text-slate-800">{project.name}</h3>
+                          {currentProject?.id === project.id && (
+                            <span className="px-3 py-1 bg-gradient-primary text-white text-xs font-semibold rounded-full">ACTIVE</span>
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-4 text-sm">
+                          <span className="flex items-center text-slate-600">
+                            <span className="font-semibold text-primary-600">${project.rate}</span>/hour
+                          </span>
+                          <span className="flex items-center text-slate-600">
+                            <span className="font-semibold text-accent-cyan">{formatTime(project.totalTime)}</span> tracked
+                          </span>
+                          <span className="flex items-center text-slate-600">
+                            <span className="font-semibold text-accent-emerald">${project.totalEarnings.toFixed(2)}</span> earned
+                          </span>
+                        </div>
                       </div>
                       <div className="flex items-center space-x-2">
                         <button
@@ -248,27 +261,27 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                             e.stopPropagation();
                             setExpandedProject(expandedProject === project.id ? null : project.id);
                           }}
-                          className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                          className="p-3 glass rounded-xl text-slate-600 hover:text-slate-800 transition-all duration-300 hover:scale-110"
                         >
-                          {expandedProject === project.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                          {expandedProject === project.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                         </button>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handleEditStart(project);
                           }}
-                          className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+                          className="p-3 glass rounded-xl text-primary-600 hover:text-primary-800 transition-all duration-300 hover:scale-110"
                         >
-                          <Edit2 size={16} />
+                          <Edit2 size={18} />
                         </button>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteProject(project.id, project.name);
                           }}
-                          className="p-2 text-red-400 hover:text-red-600 transition-colors"
+                          className="p-3 glass rounded-xl text-red-500 hover:text-red-700 transition-all duration-300 hover:scale-110"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={18} />
                         </button>
                       </div>
                     </div>
@@ -276,31 +289,41 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
 
                   {/* Expanded Project Details */}
                   {expandedProject === project.id && (
-                    <div className="px-3 pb-3 border-t border-gray-200">
-                      <div className="mt-3">
+                    <div className="px-6 pb-6 border-t border-white/20">
+                      <div className="mt-6">
                         {project.timeBlocks.length === 0 ? (
-                          <p className="text-gray-500 text-sm text-center py-4">
-                            No time blocks recorded for this project yet.
-                          </p>
+                          <div className="text-center py-8">
+                            <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center">
+                              <div className="w-6 h-6 bg-slate-400 rounded-full"></div>
+                            </div>
+                            <p className="text-slate-500 font-medium">
+                              No time blocks recorded for this project yet.
+                            </p>
+                          </div>
                         ) : (
-                          <div className="space-y-2">
-                            <h4 className="font-medium text-sm text-gray-700 mb-2">Time Blocks</h4>
-                            <div className="max-h-48 overflow-y-auto space-y-1">
+                          <div className="space-y-4">
+                            <h4 className="font-bold text-slate-700 mb-4 flex items-center">
+                              <div className="w-2 h-2 bg-gradient-primary rounded-full mr-3"></div>
+                              Time Blocks ({project.timeBlocks.length})
+                            </h4>
+                            <div className="max-h-64 overflow-y-auto space-y-3">
                               {project.timeBlocks
                                 .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
                                 .map((block) => (
-                                <div key={block.id} className="flex justify-between items-center p-2 bg-gray-50 rounded text-sm">
-                                  <div>
-                                    <p className="text-gray-800">
-                                      {formatDateTime(new Date(block.startTime))} - {formatDateTime(new Date(block.endTime))}
-                                    </p>
-                                    <p className="text-gray-600 text-xs">
-                                      {new Date(block.startTime).toLocaleDateString()}
-                                    </p>
-                                  </div>
-                                  <div className="text-right">
-                                    <p className="font-medium text-gray-800">{formatTime(block.duration)}</p>
-                                    <p className="text-green-600 font-medium text-xs">${block.earnings.toFixed(2)}</p>
+                                <div key={block.id} className="glass rounded-xl p-4 hover:shadow-soft transition-all duration-300">
+                                  <div className="flex justify-between items-center">
+                                    <div>
+                                      <p className="text-slate-800 font-medium">
+                                        {formatDateTime(new Date(block.startTime))} - {formatDateTime(new Date(block.endTime))}
+                                      </p>
+                                      <p className="text-slate-500 text-sm mt-1">
+                                        {new Date(block.startTime).toLocaleDateString()}
+                                      </p>
+                                    </div>
+                                    <div className="text-right">
+                                      <p className="font-bold text-slate-800">{formatTime(block.duration)}</p>
+                                      <p className="text-accent-emerald font-bold text-sm">${block.earnings.toFixed(2)}</p>
+                                    </div>
                                   </div>
                                 </div>
                               ))}
@@ -319,10 +342,19 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
 
       {/* Current Project Info */}
       {currentProject && (
-        <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-800">
-            <strong>Active Project:</strong> {currentProject.name} (${currentProject.rate}/hour)
-          </p>
+        <div className="mt-8 p-6 bg-gradient-primary rounded-2xl text-white animate-fade-in">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-white/90 text-sm font-medium mb-1">Currently Active</p>
+              <p className="text-xl font-bold">
+                {currentProject.name} 
+              </p>
+              <p className="text-white/80 text-sm">
+                ${currentProject.rate}/hour • {formatTime(currentProject.totalTime)} total
+              </p>
+            </div>
+            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+          </div>
         </div>
       )}
     </div>

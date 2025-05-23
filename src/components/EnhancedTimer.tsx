@@ -90,73 +90,103 @@ const EnhancedTimer: React.FC<EnhancedTimerProps> = ({
   const displayEarnings = showTotal && currentProject ? currentProject.totalEarnings : currentSessionEarnings;
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg mx-auto mb-8">
+    <div className="glass rounded-3xl shadow-glass p-10 max-w-2xl mx-auto mb-12 animate-scale-in backdrop-blur-xl border border-white/20">
       <div className="text-center">
         {/* Project Info */}
         {currentProject ? (
-          <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
-            <h3 className="text-lg font-semibold text-blue-800">{currentProject.name}</h3>
-            <p className="text-blue-600">${currentProject.rate}/hour</p>
+          <div className="mb-8 p-6 bg-gradient-primary rounded-2xl shadow-soft transform hover:scale-105 transition-all duration-300">
+            <h3 className="text-xl font-bold text-white mb-2">{currentProject.name}</h3>
+            <p className="text-white/90 text-lg font-medium">${currentProject.rate}/hour</p>
+            <div className="absolute top-2 right-2 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
           </div>
         ) : (
-          <div className="mb-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg border border-yellow-200">
-            <p className="text-yellow-800 font-medium">Select a project to start tracking time</p>
+          <div className="mb-8 p-6 bg-gradient-warning rounded-2xl shadow-soft">
+            <p className="text-white font-semibold text-lg">Select a project to start tracking time</p>
           </div>
         )}
 
         {/* Time Display */}
-        <div className="text-5xl font-mono font-bold text-gray-800 mb-3 tracking-wider">
-          {formatTime(displayTime)}
+        <div className="relative mb-8">
+          <div className="text-7xl font-mono font-bold text-slate-800 mb-4 tracking-wider leading-none">
+            {formatTime(displayTime)}
+          </div>
+          {isRunning && (
+            <div className="absolute -inset-4 bg-gradient-success rounded-2xl opacity-20 animate-pulse-slow"></div>
+          )}
         </div>
 
         {/* Earnings Display */}
-        <div className="text-2xl font-bold text-green-600 mb-6">
-          ${displayEarnings.toFixed(2)}
+        <div className="mb-8">
+          <div className="text-4xl font-bold bg-gradient-success bg-clip-text text-transparent mb-2">
+            ${displayEarnings.toFixed(2)}
+          </div>
+          <div className="text-sm text-slate-600 font-medium">
+            {showTotal ? 'Total Earnings' : 'Current Session'}
+          </div>
         </div>
 
         {/* Toggle Button */}
         {currentProject && (
           <button
             onClick={() => setShowTotal(!showTotal)}
-            className="flex items-center justify-center space-x-2 mx-auto mb-4 px-3 py-1 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+            className="flex items-center justify-center space-x-3 mx-auto mb-8 px-6 py-3 glass rounded-full text-slate-700 hover:text-slate-900 transition-all duration-300 hover:scale-105 group"
           >
-            {showTotal ? <ToggleRight size={20} /> : <ToggleLeft size={20} />}
-            <span>{showTotal ? 'Total Time/Earnings' : 'Current Session'}</span>
+            <div className={`transition-colors duration-300 ${showTotal ? 'text-primary-600' : 'text-slate-400'}`}>
+              {showTotal ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
+            </div>
+            <span className="font-medium group-hover:text-primary-600 transition-colors">
+              {showTotal ? 'Total Time/Earnings' : 'Current Session'}
+            </span>
           </button>
         )}
         
         {/* Control Buttons */}
-        <div className="flex justify-center space-x-6 mb-6">
+        <div className="flex justify-center items-center space-x-8 mb-8">
           <button
             onClick={handleToggle}
             disabled={!currentProject}
-            className={`flex items-center justify-center w-20 h-20 rounded-full transition-all duration-200 transform hover:scale-105 ${
+            className={`group flex items-center justify-center w-24 h-24 rounded-full transition-all duration-300 transform hover:scale-110 shadow-elevated relative overflow-hidden ${
               !currentProject 
-                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
                 : isRunning 
-                  ? 'bg-red-500 hover:bg-red-600 text-white' 
-                  : 'bg-green-500 hover:bg-green-600 text-white'
+                  ? 'bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white shadow-rose-200' 
+                  : 'bg-gradient-success hover:shadow-cyan-200 text-white'
             }`}
           >
-            {isRunning ? <Pause size={28} /> : <Play size={28} />}
+            <div className="relative z-10">
+              {isRunning ? <Pause size={32} /> : <Play size={32} className="ml-1" />}
+            </div>
+            {!currentProject && (
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            )}
           </button>
           
           <button
             onClick={handleReset}
-            className="px-8 py-4 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-all duration-200 transform hover:scale-105 font-medium"
+            className="group px-8 py-4 glass rounded-2xl text-slate-700 hover:text-slate-900 transition-all duration-300 transform hover:scale-105 font-semibold shadow-soft relative overflow-hidden"
           >
-            Reset
+            <span className="relative z-10">Reset</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-200/50 to-slate-300/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </button>
         </div>
         
         {/* Status */}
-        <div className="text-sm text-gray-600">
-          {!currentProject 
-            ? 'No project selected' 
-            : isRunning 
-              ? 'Timer is running...' 
-              : 'Timer is stopped'
-          }
+        <div className="flex items-center justify-center space-x-2">
+          <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+            !currentProject 
+              ? 'bg-slate-400' 
+              : isRunning 
+                ? 'bg-green-400 animate-pulse' 
+                : 'bg-orange-400'
+          }`}></div>
+          <div className="text-sm text-slate-600 font-medium">
+            {!currentProject 
+              ? 'No project selected' 
+              : isRunning 
+                ? 'Timer is running...' 
+                : 'Timer is stopped'
+            }
+          </div>
         </div>
       </div>
     </div>
