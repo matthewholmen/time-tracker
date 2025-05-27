@@ -1,8 +1,9 @@
-import { Project, TimeBlock } from '../types';
+import { Project, TimeBlock, TaxSettings } from '../types';
+import { calculateTax } from './taxUtils';
 
-export const generateCSV = (projects: Project[]): string => {
+export const generateCSV = (projects: Project[], taxSettings?: TaxSettings): string => {
   // CSV Headers
-  const headers = [
+  const baseHeaders = [
     'Project',
     'Start Time',
     'End Time', 
@@ -11,6 +12,14 @@ export const generateCSV = (projects: Project[]): string => {
     'Rate ($/hour)',
     'Earnings ($)'
   ];
+  
+  const taxHeaders = taxSettings?.includeInExports ? [
+    'Tax Rate (%)',
+    'Est. Taxes ($)',
+    'Net Earnings ($)'
+  ] : [];
+  
+  const headers = [...baseHeaders, ...taxHeaders];
 
   // Collect all time blocks from all projects
   const allTimeBlocks: Array<TimeBlock & { projectName: string }> = [];
@@ -34,7 +43,7 @@ export const generateCSV = (projects: Project[]): string => {
     const durationHours = (block.duration / 3600).toFixed(3);
     const durationFormatted = formatDurationForCSV(block.duration);
     
-    return [
+    const baseRow = [
       escapeCSVField(block.projectName),
       startTime,
       endTime,
@@ -43,6 +52,18 @@ export const generateCSV = (projects: Project[]): string => {
       block.rate.toFixed(2),
       block.earnings.toFixed(2)
     ];
+    
+    if (taxSettings?.includeInExports) {
+      const taxCalc = calculateTax(block.earnings, taxSettings);
+      const taxRow = [
+        taxSettings.taxRate.toFixed(1),
+        taxCalc.taxAmount.toFixed(2),
+        taxCalc.netEarnings.toFixed(2)
+      ];
+      return [...baseRow, ...taxRow];
+    }
+    
+    return baseRow;
   });
 
   // Combine headers and rows
@@ -53,8 +74,8 @@ export const generateCSV = (projects: Project[]): string => {
   return csvContent;
 };
 
-export const generateProjectSummaryCSV = (projects: Project[]): string => {
-  const headers = [
+export const generateProjectSummaryCSV = (projects: Project[], taxSettings?: TaxSettings): string => {
+  const baseHeaders = [
     'Project Name',
     'Hourly Rate ($/hour)',
     'Total Time (Hours)',
@@ -63,6 +84,14 @@ export const generateProjectSummaryCSV = (projects: Project[]): string => {
     'Total Earnings ($)',
     'Average Session Length (Minutes)'
   ];
+  
+  const taxHeaders = taxSettings?.includeInExports ? [
+    'Tax Rate (%)',
+    'Est. Total Taxes ($)',
+    'Net Total Earnings ($)'
+  ] : [];
+  
+  const headers = [...baseHeaders, ...taxHeaders];
 
   const rows = projects.map(project => {
     const totalHours = (project.totalTime / 3600).toFixed(3);
@@ -72,7 +101,7 @@ export const generateProjectSummaryCSV = (projects: Project[]): string => {
       ? ((project.totalTime / sessionCount) / 60).toFixed(1)
       : '0.0';
 
-    return [
+    const baseRow = [
       escapeCSVField(project.name),
       project.rate.toFixed(2),
       totalHours,
@@ -81,6 +110,18 @@ export const generateProjectSummaryCSV = (projects: Project[]): string => {
       project.totalEarnings.toFixed(2),
       avgSessionLength
     ];
+    
+    if (taxSettings?.includeInExports) {
+      const taxCalc = calculateTax(project.totalEarnings, taxSettings);
+      const taxRow = [
+        taxSettings.taxRate.toFixed(1),
+        taxCalc.taxAmount.toFixed(2),
+        taxCalc.netEarnings.toFixed(2)
+      ];
+      return [...baseRow, ...taxRow];
+    }
+    
+    return baseRow;
   });
 
   const csvContent = [headers, ...rows]

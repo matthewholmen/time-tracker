@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Download, FileText, BarChart3, Calendar } from 'lucide-react';
-import { Project } from '../types';
+import { Project, TaxSettings } from '../types';
 import { generateCSV, generateProjectSummaryCSV, downloadCSV } from '../utils/csvExport';
 
 interface ExportManagerProps {
   projects: Project[];
+  taxSettings: TaxSettings;
 }
 
-const ExportManager: React.FC<ExportManagerProps> = ({ projects }) => {
+const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) => {
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExportTimeBlocks = () => {
@@ -19,7 +20,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects }) => {
     setIsExporting(true);
     
     try {
-      const csvContent = generateCSV(projects);
+      const csvContent = generateCSV(projects, taxSettings);
       const timestamp = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
       const filename = `time-tracker-sessions-${timestamp}.csv`;
       
@@ -41,7 +42,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects }) => {
     setIsExporting(true);
     
     try {
-      const csvContent = generateProjectSummaryCSV(projects);
+      const csvContent = generateProjectSummaryCSV(projects, taxSettings);
       const timestamp = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
       const filename = `time-tracker-summary-${timestamp}.csv`;
       

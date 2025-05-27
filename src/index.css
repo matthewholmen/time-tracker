@@ -23,16 +23,17 @@ body {
 /* Glassmorphism utility classes */
 @layer utilities {
   .glass {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.1);
   }
   
   .glass-dark {
     background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.125);
   }
   
@@ -41,6 +42,14 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+  
+  /* Improved timer display */
+  .timer-display {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+    word-spacing: -0.1em;
+    line-height: 1.1;
   }
 }
 
@@ -61,4 +70,47 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #5a67d8 0%, #6b5b95 100%);
+}
+
+/* Responsive font sizing for timer */
+@media (max-width: 640px) {
+  .font-mono {
+    letter-spacing: -0.1em;
+  }
+}
+
+/* Custom slider styles for tax settings */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 20px;
+  width: 20px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-thumb {
+  height: 20px;
+  width: 20px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-track {
+  background: transparent;
+}
+
+/* Sticky timer header styles */
+.sticky-timer-visible {
+  padding-top: 70px; /* Adjust based on sticky header height */
+  transition: padding-top 0.3s ease;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
 }

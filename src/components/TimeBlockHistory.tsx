@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Clock, DollarSign, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
-import { Project, TimeBlock } from '../types';
+import { Clock, DollarSign, Calendar, ChevronDown, ChevronUp, Calculator } from 'lucide-react';
+import { Project, TimeBlock, TaxSettings } from '../types';
 import { formatDateForExport } from '../utils/projectUtils';
+import { calculateTax } from '../utils/taxUtils';
 
 interface TimeBlockHistoryProps {
   projects: Project[];
   currentProject: Project | null;
+  taxSettings: TaxSettings;
 }
 
-const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentProject }) => {
+const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentProject, taxSettings }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedProject, setSelectedProject] = useState<string>('all');
 
@@ -87,6 +89,7 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
   const totalSessions = allTimeBlocks.length;
   const totalTime = allTimeBlocks.reduce((sum, block) => sum + block.duration, 0);
   const totalEarnings = allTimeBlocks.reduce((sum, block) => sum + block.earnings, 0);
+  const totalTaxCalc = calculateTax(totalEarnings, taxSettings);
 
   if (projects.length === 0) {
     return null;
@@ -106,7 +109,7 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className={`grid grid-cols-1 ${taxSettings.includeInDisplays && totalEarnings > 0 ? 'md:grid-cols-2 lg:grid-cols-5' : 'md:grid-cols-3'} gap-6 mb-8`}>
         <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
           <div className="flex items-center space-x-3 text-primary-600 mb-3">
             <div className="p-2 bg-primary-100 rounded-xl">
@@ -134,6 +137,28 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
           </div>
           <p className="text-3xl font-bold text-slate-800">${totalEarnings.toFixed(2)}</p>
         </div>
+        {taxSettings.includeInDisplays && totalEarnings > 0 && (
+          <>
+            <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-center space-x-3 text-red-600 mb-3">
+                <div className="p-2 bg-red-100 rounded-xl">
+                  <Calculator size={20} />
+                </div>
+                <span className="font-semibold">Est. Taxes</span>
+              </div>
+              <p className="text-3xl font-bold text-slate-800">${totalTaxCalc.taxAmount.toFixed(2)}</p>
+            </div>
+            <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-center space-x-3 text-green-600 mb-3">
+                <div className="p-2 bg-green-100 rounded-xl">
+                  <DollarSign size={20} />
+                </div>
+                <span className="font-semibold">After Taxes</span>
+              </div>
+              <p className="text-3xl font-bold text-slate-800">${totalTaxCalc.netEarnings.toFixed(2)}</p>
+            </div>
+          </>
+        )}
       </div>
 
       {isExpanded && (
