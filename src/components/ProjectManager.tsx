@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Check, X, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Edit2, Check, X, Trash2, ChevronDown, ChevronUp, MoreVertical } from 'lucide-react';
 import { Project } from '../types';
 import { getProjectGradientClasses } from '../utils/gradientUtils';
 import ConfirmDialog from './ConfirmDialog';
@@ -31,6 +31,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
   const [isCreating, setIsCreating] = useState(false);
   const [editingProject, setEditingProject] = useState<string | null>(null);
   const [expandedProject, setExpandedProject] = useState<string | null>(null);
+  const [showProjectActions, setShowProjectActions] = useState<string | null>(null);
   const [newProjectName, setNewProjectName] = useState('');
   const [newProjectRate, setNewProjectRate] = useState('');
   const [editName, setEditName] = useState('');
@@ -79,6 +80,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
     setEditingProject(project.id);
     setEditName(project.name);
     setEditRate(project.rate.toString());
+    setShowProjectActions(null);
   };
 
   const handleEditSubmit = (project: Project) => {
@@ -116,6 +118,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
   };
 
   const handleDeleteProject = (projectId: string, projectName: string) => {
+    setShowProjectActions(null);
     setConfirmDialog({
       isOpen: true,
       title: 'Delete Project',
@@ -184,12 +187,12 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
   };
 
   return (
-    <div className="glass rounded-3xl shadow-glass p-8 mb-12 animate-fade-in">
-      <div className="flex justify-between items-center mb-8">
+    <div className="glass rounded-3xl shadow-glass p-4 sm:p-8 mb-12 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 space-y-4 sm:space-y-0">
         <h2 className="text-2xl font-bold text-slate-800">Projects</h2>
         <button
           onClick={() => setIsCreating(true)}
-          className="flex items-center space-x-3 px-6 py-3 bg-gradient-primary hover:shadow-elevated text-white rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
+          className="flex items-center justify-center space-x-3 px-6 py-3 bg-gradient-primary hover:shadow-elevated text-white rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold w-full sm:w-auto"
         >
           <Plus size={18} />
           <span>Add Project</span>
@@ -198,14 +201,14 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
 
       {/* Create New Project Form */}
       {isCreating && (
-        <form onSubmit={handleCreateSubmit} className="mb-6 p-6 glass rounded-2xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <form onSubmit={handleCreateSubmit} className="mb-6 p-4 sm:p-6 glass rounded-2xl">
+          <div className="space-y-4">
             <input
               type="text"
               placeholder="Project name"
               value={newProjectName}
               onChange={(e) => setNewProjectName(e.target.value)}
-              className="px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+              className="w-full px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
               required
             />
             <input
@@ -215,14 +218,14 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
               onChange={(e) => setNewProjectRate(e.target.value)}
               min="0"
               step="0.01"
-              className="px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+              className="w-full px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
               required
             />
           </div>
-          <div className="flex space-x-3">
+          <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mt-4">
             <button
               type="submit"
-              className="flex items-center space-x-2 px-6 py-3 bg-gradient-success hover:shadow-elevated text-white rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
+              className="flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-success hover:shadow-elevated text-white rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
             >
               <Check size={18} />
               <span>Create</span>
@@ -234,7 +237,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                 setNewProjectName('');
                 setNewProjectRate('');
               }}
-              className="flex items-center space-x-2 px-6 py-3 glass hover:shadow-soft text-slate-700 rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
+              className="flex items-center justify-center space-x-2 px-6 py-3 glass hover:shadow-soft text-slate-700 rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
             >
               <X size={18} />
               <span>Cancel</span>
@@ -269,13 +272,13 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
               }`}
             >
               {editingProject === project.id ? (
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="p-4 sm:p-6">
+                  <div className="space-y-4">
                     <input
                       type="text"
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                      className="px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+                      className="w-full px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
                       onClick={(e) => e.stopPropagation()}
                     />
                     <input
@@ -284,17 +287,17 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                       onChange={(e) => setEditRate(e.target.value)}
                       min="0"
                       step="0.01"
-                      className="px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+                      className="w-full px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
                       onClick={(e) => e.stopPropagation()}
                     />
                   </div>
-                  <div className="flex space-x-3">
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mt-4">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleEditSubmit(project);
                       }}
-                      className="flex items-center space-x-2 px-4 py-2 bg-gradient-success hover:shadow-soft text-white rounded-xl text-sm transition-all duration-300 transform hover:scale-105 font-semibold"
+                      className="flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-success hover:shadow-soft text-white rounded-xl text-sm transition-all duration-300 transform hover:scale-105 font-semibold"
                     >
                       <Check size={16} />
                       <span>Save</span>
@@ -304,7 +307,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                         e.stopPropagation();
                         handleEditCancel();
                       }}
-                      className="flex items-center space-x-2 px-4 py-2 glass hover:shadow-soft text-slate-700 rounded-xl text-sm transition-all duration-300 transform hover:scale-105 font-semibold"
+                      className="flex items-center justify-center space-x-2 px-4 py-2 glass hover:shadow-soft text-slate-700 rounded-xl text-sm transition-all duration-300 transform hover:scale-105 font-semibold"
                     >
                       <X size={16} />
                       <span>Cancel</span>
@@ -314,7 +317,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
               ) : (
                 <>
                   <div 
-                    className={`p-6 ${isTimerRunning && currentProject?.id !== project.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                    className={`p-4 sm:p-6 ${isTimerRunning && currentProject?.id !== project.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                     onClick={() => {
                       if (isTimerRunning && currentProject?.id !== project.id) {
                         setNotification({
@@ -328,17 +331,19 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                       onProjectSelect(project);
                     }}
                   >
-                    <div className="flex justify-between items-center">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-3 mb-2">
-                          <h3 className={`text-lg font-bold ${
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-3">
+                          <h3 className={`text-lg font-bold truncate ${
                             currentProject?.id === project.id ? 'text-slate-800' : 'text-slate-600'
                           }`}>{project.name}</h3>
                           {currentProject?.id === project.id && (
-                            <span className={`px-3 py-1 text-white text-xs font-semibold rounded-full ${gradientClasses.background}`}>ACTIVE</span>
+                            <span className={`px-3 py-1 text-white text-xs font-semibold rounded-full ${gradientClasses.background} whitespace-nowrap`}>ACTIVE</span>
                           )}
                         </div>
-                        <div className="flex flex-wrap gap-4 text-sm">
+                        
+                        {/* Project Stats - Mobile Responsive Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-sm">
                           <span className={`flex items-center ${
                             currentProject?.id === project.id ? 'text-slate-700' : 'text-slate-500'
                           }`}>
@@ -371,53 +376,112 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setExpandedProject(expandedProject === project.id ? null : project.id);
-                          }}
-                          className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
-                            currentProject?.id === project.id
-                              ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                              : 'bg-slate-200 text-slate-500 hover:bg-slate-300'
-                          }`}
-                        >
-                          {expandedProject === project.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEditStart(project);
-                          }}
-                          className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
-                            currentProject?.id === project.id
-                              ? 'bg-slate-100 text-primary-600 hover:bg-slate-200'
-                              : 'bg-slate-200 text-primary-500 hover:bg-slate-300'
-                          }`}
-                        >
-                          <Edit2 size={18} />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteProject(project.id, project.name);
-                          }}
-                          className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
-                            currentProject?.id === project.id
-                              ? 'bg-slate-100 text-red-500 hover:bg-slate-200'
-                              : 'bg-slate-200 text-red-400 hover:bg-slate-300'
-                          }`}
-                        >
-                          <Trash2 size={18} />
-                        </button>
+                      
+                      {/* Mobile-Friendly Actions */}
+                      <div className="flex items-center ml-2">
+                        {/* Desktop: Individual buttons */}
+                        <div className="hidden sm:flex items-center space-x-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setExpandedProject(expandedProject === project.id ? null : project.id);
+                            }}
+                            className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
+                              currentProject?.id === project.id
+                                ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-200 text-slate-500 hover:bg-slate-300'
+                            }`}
+                          >
+                            {expandedProject === project.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditStart(project);
+                            }}
+                            className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
+                              currentProject?.id === project.id
+                                ? 'bg-slate-100 text-primary-600 hover:bg-slate-200'
+                                : 'bg-slate-200 text-primary-500 hover:bg-slate-300'
+                            }`}
+                          >
+                            <Edit2 size={18} />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteProject(project.id, project.name);
+                            }}
+                            className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
+                              currentProject?.id === project.id
+                                ? 'bg-slate-100 text-red-500 hover:bg-slate-200'
+                                : 'bg-slate-200 text-red-400 hover:bg-slate-300'
+                            }`}
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                        
+                        {/* Mobile: Dropdown menu */}
+                        <div className="relative sm:hidden">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowProjectActions(showProjectActions === project.id ? null : project.id);
+                            }}
+                            className={`p-3 rounded-xl transition-all duration-300 ${
+                              currentProject?.id === project.id
+                                ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                : 'bg-slate-200 text-slate-500 hover:bg-slate-300'
+                            }`}
+                          >
+                            <MoreVertical size={18} />
+                          </button>
+                          
+                          {/* Dropdown Menu */}
+                          {showProjectActions === project.id && (
+                            <div className="absolute right-0 top-full mt-2 w-48 glass rounded-xl shadow-glass border border-white/20 py-2 z-10">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setExpandedProject(expandedProject === project.id ? null : project.id);
+                                  setShowProjectActions(null);
+                                }}
+                                className="w-full px-4 py-3 text-left text-slate-700 hover:bg-slate-100 transition-colors flex items-center space-x-3"
+                              >
+                                {expandedProject === project.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                <span>{expandedProject === project.id ? 'Hide Sessions' : 'Show Sessions'}</span>
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleEditStart(project);
+                                }}
+                                className="w-full px-4 py-3 text-left text-primary-600 hover:bg-slate-100 transition-colors flex items-center space-x-3"
+                              >
+                                <Edit2 size={16} />
+                                <span>Edit Project</span>
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteProject(project.id, project.name);
+                                }}
+                                className="w-full px-4 py-3 text-left text-red-500 hover:bg-slate-100 transition-colors flex items-center space-x-3"
+                              >
+                                <Trash2 size={16} />
+                                <span>Delete Project</span>
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Expanded Project Details */}
                   {expandedProject === project.id && (
-                    <div className="px-6 pb-6 border-t border-white/20">
+                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-white/20">
                       <div className="mt-6">
                         {project.timeBlocks.length === 0 ? (
                           <div className="text-center py-8">
@@ -439,26 +503,26 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                                 .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
                                 .map((block) => (
                                 <div key={block.id} className="glass rounded-xl p-4 hover:shadow-sm transition-all duration-300 group">
-                                  <div className="flex justify-between items-center">
-                                    <div className="flex-1">
-                                      <p className="text-slate-800 font-medium">
+                                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+                                    <div className="flex-1 min-w-0">
+                                      <p className="text-slate-800 font-medium text-sm sm:text-base">
                                         {formatDateTime(new Date(block.startTime))} - {formatDateTime(new Date(block.endTime))}
                                       </p>
-                                      <p className="text-slate-500 text-sm mt-1">
+                                      <p className="text-slate-500 text-xs sm:text-sm mt-1">
                                         {new Date(block.startTime).toLocaleDateString()}
                                       </p>
                                     </div>
-                                    <div className="flex items-center space-x-3">
-                                      <div className="text-right">
-                                        <p className="font-bold text-slate-800">{formatTime(block.duration)}</p>
-                                        <p className="text-accent-emerald font-bold text-sm">${block.earnings.toFixed(2)}</p>
+                                    <div className="flex items-center justify-between sm:justify-end space-x-3">
+                                      <div className="text-left sm:text-right">
+                                        <p className="font-bold text-slate-800 text-sm sm:text-base">{formatTime(block.duration)}</p>
+                                        <p className="text-accent-emerald font-bold text-xs sm:text-sm">${block.earnings.toFixed(2)}</p>
                                       </div>
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           handleTimeBlockDelete(project.id, block.id);
                                         }}
-                                        className="opacity-0 group-hover:opacity-100 p-2 glass rounded-lg text-red-500 hover:text-red-700 transition-all duration-300 hover:scale-110"
+                                        className="opacity-70 sm:opacity-0 group-hover:opacity-100 p-2 glass rounded-lg text-red-500 hover:text-red-700 transition-all duration-300 hover:scale-110"
                                         title="Delete session"
                                       >
                                         <Trash2 size={14} />
@@ -481,7 +545,13 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
         )}
       </div>
 
-
+      {/* Overlay to close mobile dropdown */}
+      {showProjectActions && (
+        <div 
+          className="fixed inset-0 z-5 sm:hidden" 
+          onClick={() => setShowProjectActions(null)}
+        />
+      )}
       
       {/* Styled Dialogs */}
       <ConfirmDialog

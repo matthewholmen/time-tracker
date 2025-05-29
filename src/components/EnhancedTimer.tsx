@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, ToggleLeft, ToggleRight, Calculator, Eye } from 'lucide-react';
+import { Play, Pause, Calculator } from 'lucide-react';
 import { Project, TaxSettings } from '../types';
 import { calculateTax } from '../utils/taxUtils';
 import { getProjectGradientClasses } from '../utils/gradientUtils';
@@ -59,7 +59,34 @@ const StickyTimerHeader: React.FC<StickyTimerHeaderProps> = ({
     }`}>
       <div className="glass border-b border-white/20 backdrop-blur-xl">
         <div className="container mx-auto px-4 py-3 max-w-5xl">
-          <div className="flex items-center justify-between">
+          {/* Mobile Layout */}
+          <div className="flex sm:hidden items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className={`w-3 h-3 rounded-full transition-colors ${
+                isRunning ? 'bg-green-400 animate-pulse' : 'bg-orange-400'
+              }`}></div>
+              <div>
+                <div className="text-sm font-semibold text-slate-800">{currentProject.name}</div>
+                <div className="text-xs text-slate-600">${currentProject.rate}/hour</div>
+              </div>
+            </div>
+            <div className="font-mono text-lg font-bold text-slate-800">
+              {formatTime(sessionSeconds)}
+            </div>
+            <button
+              onClick={onToggle}
+              className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 transform hover:scale-110 shadow-soft hover:shadow-elevated ${
+                isRunning 
+                  ? 'bg-gradient-to-br from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white' 
+                  : 'bg-gradient-primary text-white'
+              }`}
+            >
+              {isRunning ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
+            </button>
+          </div>
+          
+          {/* Desktop Layout */}
+          <div className="hidden sm:flex items-center justify-between">
             {/* Project Info & Timer */}
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-3">
@@ -219,75 +246,145 @@ const EnhancedTimer: React.FC<EnhancedTimerProps> = ({
         )}
         
         <div className="glass rounded-3xl shadow-glass backdrop-blur-xl border border-white/20 overflow-hidden">
-          {/* Project Header with Toggle */}
+          {/* Project Header - Mobile Responsive */}
           {currentProject ? (
-            <div className={`p-6 relative overflow-hidden ${gradientClasses.background}`}>
+            <div className={`p-4 sm:p-6 relative overflow-hidden ${gradientClasses.background}`}>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] animate-[shimmer_3s_ease-in-out_infinite]"></div>
-              <div className="relative z-10 flex items-center justify-between">
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-1">{currentProject.name}</h3>
-                  <p className="text-white/90 text-sm font-medium">${currentProject.rate}/hour</p>
-                </div>
-                
-                {/* Control Button - Centered */}
-                <div className="absolute left-1/2 transform -translate-x-1/2">
-                  <button
-                    onClick={handleToggle}
-                    disabled={!currentProject}
-                    className={`group relative flex items-center justify-center w-16 h-16 rounded-full transition-all duration-500 transform hover:scale-110 shadow-elevated hover:shadow-glass ${
-                      !currentProject 
-                        ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
-                        : isRunning 
-                          ? 'bg-gradient-to-br from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white' 
-                          : 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm'
-                    }`}
-                  >
-                    <div className="relative z-10 transition-transform duration-300 group-hover:scale-110">
-                      {isRunning ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
-                    </div>
-                    
-                    {/* Disabled state shimmer */}
-                    {!currentProject && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 rounded-full"></div>
-                    )}
-                  </button>
-                </div>
-                
-                {/* View Toggle */}
-                <button
-                  onClick={() => setShowTotal(!showTotal)}
-                  className="inline-flex items-center space-x-2 px-4 py-2 bg-white/20 rounded-full text-white hover:bg-white/30 transition-all duration-300 hover:scale-105 group shadow-soft"
-                >
-                  <Eye size={14} className="transition-colors" />
-                  <span className="text-sm font-semibold">
-                    {showTotal ? 'Total Time' : 'Session Time'}
-                  </span>
-                  <div className={`transition-colors duration-300 ${showTotal ? 'text-white' : 'text-white/70'}`}>
-                    {showTotal ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}
+              
+              {/* Desktop Layout: Flex with proper positioning */}
+              <div className="relative z-10">
+                {/* Mobile: Stack everything */}
+                <div className="block sm:hidden space-y-4">
+                  {/* Project Info */}
+                  <div className="text-center">
+                    <h3 className="text-xl font-bold text-white mb-1">{currentProject.name}</h3>
+                    <p className="text-white/90 text-sm font-medium">${currentProject.rate}/hour</p>
                   </div>
-                </button>
+                  
+                  {/* Control Button - Centered */}
+                  <div className="flex justify-center py-4">
+                    <button
+                      onClick={handleToggle}
+                      disabled={!currentProject}
+                      className={`group relative flex items-center justify-center w-16 h-16 rounded-full transition-all duration-500 transform hover:scale-110 shadow-elevated hover:shadow-glass ${
+                        !currentProject 
+                          ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                          : isRunning 
+                            ? 'bg-gradient-to-br from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white' 
+                            : 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm'
+                      }`}
+                    >
+                      <div className="relative z-10 transition-transform duration-300 group-hover:scale-110">
+                        {isRunning ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
+                      </div>
+                      
+                      {/* Disabled state shimmer */}
+                      {!currentProject && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 rounded-full"></div>
+                      )}
+                    </button>
+                  </div>
+                  
+                  {/* View Toggle - Toggle Switch */}
+                  <div className="flex justify-center">
+                    <div className="flex items-center space-x-3">
+                      <span className={`text-sm font-semibold transition-colors ${
+                        !showTotal ? 'text-white' : 'text-white/60'
+                      }`}>Session</span>
+                      <button
+                        onClick={() => setShowTotal(!showTotal)}
+                        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent ${
+                          showTotal ? 'bg-white/30' : 'bg-white/20'
+                        }`}
+                      >
+                        <span
+                          className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-lg transition-transform ${
+                            showTotal ? 'translate-x-6' : 'translate-x-1'
+                          }`}
+                        />
+                      </button>
+                      <span className={`text-sm font-semibold transition-colors ${
+                        showTotal ? 'text-white' : 'text-white/60'
+                      }`}>Total</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Desktop: Original flex layout */}
+                <div className="hidden sm:flex items-center justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-1">{currentProject.name}</h3>
+                    <p className="text-white/90 text-sm font-medium">${currentProject.rate}/hour</p>
+                  </div>
+                  
+                  {/* Control Button - Centered */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2">
+                    <button
+                      onClick={handleToggle}
+                      disabled={!currentProject}
+                      className={`group relative flex items-center justify-center w-20 h-20 rounded-full transition-all duration-500 transform hover:scale-110 shadow-elevated hover:shadow-glass ${
+                        !currentProject 
+                          ? 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                          : isRunning 
+                            ? 'bg-gradient-to-br from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white' 
+                            : 'bg-white/20 hover:bg-white/30 text-white backdrop-blur-sm'
+                      }`}
+                    >
+                      <div className="relative z-10 transition-transform duration-300 group-hover:scale-110">
+                        {isRunning ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
+                      </div>
+                      
+                      {/* Disabled state shimmer */}
+                      {!currentProject && (
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 rounded-full"></div>
+                      )}
+                    </button>
+                  </div>
+                  
+                  {/* View Toggle - Toggle Switch */}
+                  <div className="flex items-center space-x-3">
+                    <span className={`text-sm font-semibold transition-colors ${
+                      !showTotal ? 'text-white' : 'text-white/60'
+                    }`}>Session</span>
+                    <button
+                      onClick={() => setShowTotal(!showTotal)}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-transparent ${
+                        showTotal ? 'bg-white/30' : 'bg-white/20'
+                      }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white shadow-lg transition-transform ${
+                          showTotal ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                    <span className={`text-sm font-semibold transition-colors ${
+                      showTotal ? 'text-white' : 'text-white/60'
+                    }`}>Total</span>
+                  </div>
+                </div>
               </div>
             </div>
           ) : (
-            <div className={`p-6 text-center ${gradientClasses.background}`}>
+            <div className={`p-4 sm:p-6 text-center ${gradientClasses.background}`}>
               <p className="text-white font-semibold">Select a project to start tracking time</p>
             </div>
           )}
           
           {/* Main Timer Content */}
-          <div className="p-6">
-            {/* Timer Display - Centered */}
-            <div className="text-center mb-8">
-              <div className="text-6xl md:text-7xl font-mono font-black text-slate-800 timer-display leading-none tracking-tighter">
+          <div className="p-4 sm:p-6">
+            {/* Timer Display - Responsive font size */}
+            <div className="text-center mb-6 sm:mb-8">
+              <div className="text-4xl sm:text-6xl md:text-7xl font-mono font-black text-slate-800 timer-display leading-none tracking-tighter">
                 {formatTime(displayTime)}
               </div>
             </div>
             
-            {/* Earnings & Tax Section - Horizontal Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Earnings & Tax Section - Responsive Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Current Session Earnings */}
-              <div className="glass rounded-2xl p-6 shadow-soft text-center">
-                <div className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
+              <div className="glass rounded-2xl p-4 sm:p-6 shadow-soft text-center sm:col-span-2 lg:col-span-1">
+                <div className="text-xl sm:text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent mb-2">
                   ${displayEarnings.toFixed(2)}
                 </div>
                 <div className="text-slate-700 font-semibold text-sm">
@@ -298,16 +395,16 @@ const EnhancedTimer: React.FC<EnhancedTimerProps> = ({
               {/* Tax Information */}
               {taxSettings.includeInDisplays && currentProject ? (
                 <>
-                  <div className="glass rounded-2xl p-6 shadow-soft text-center">
-                    <div className="text-2xl font-bold text-red-700 mb-2">
+                  <div className="glass rounded-2xl p-4 sm:p-6 shadow-soft text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-red-700 mb-2">
                       ${taxCalc.taxAmount.toFixed(2)}
                     </div>
                     <div className="text-red-700 font-semibold text-sm">
                       Est. Taxes ({taxSettings.taxRate}%)
                     </div>
                   </div>
-                  <div className="glass rounded-2xl p-6 shadow-soft text-center">
-                    <div className="text-2xl font-bold text-green-700 mb-2">
+                  <div className="glass rounded-2xl p-4 sm:p-6 shadow-soft text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-green-700 mb-2">
                       ${taxCalc.netEarnings.toFixed(2)}
                     </div>
                     <div className="text-green-700 font-semibold text-sm">
@@ -316,7 +413,7 @@ const EnhancedTimer: React.FC<EnhancedTimerProps> = ({
                   </div>
                 </>
               ) : (
-                <div className="md:col-span-2 glass rounded-2xl p-6 shadow-soft text-center opacity-50">
+                <div className="sm:col-span-2 lg:col-span-2 glass rounded-2xl p-4 sm:p-6 shadow-soft text-center opacity-50">
                   <div className="flex items-center justify-center space-x-2 mb-2">
                     <Calculator size={16} className="text-slate-400" />
                     <span className="text-sm font-semibold text-slate-600">Tax Estimates Disabled</span>
