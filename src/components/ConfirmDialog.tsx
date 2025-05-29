@@ -55,14 +55,14 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
       ></div>
       
       {/* Dialog */}
-      <div className="relative glass rounded-3xl shadow-glass p-8 max-w-md w-full animate-scale-in border border-white/20">
+      <div className="relative bg-black/80 backdrop-blur-lg rounded-3xl shadow-glass p-8 max-w-md w-full animate-scale-in border border-white/30">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
             <div className={`p-2 rounded-xl bg-opacity-20 ${styles.icon}`}>
               <AlertTriangle size={24} className={styles.icon} />
             </div>
-            <h3 className="text-xl font-bold text-slate-800">{title}</h3>
+            <h3 className="text-xl font-bold text-white">{title}</h3>
           </div>
           <button
             onClick={onCancel}
@@ -73,7 +73,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         </div>
         
         {/* Message */}
-        <p className="text-slate-600 mb-8 leading-relaxed">
+        <p className="text-white mb-8 leading-relaxed">
           {message}
         </p>
         

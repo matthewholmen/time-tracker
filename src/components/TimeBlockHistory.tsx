@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, DollarSign, Calendar, ChevronDown, ChevronUp, Calculator } from 'lucide-react';
+import { Clock, DollarSign, Calendar, ChevronDown, ChevronUp, Calculator, Database, Activity, Zap } from 'lucide-react';
 import { Project, TimeBlock, TaxSettings } from '../types';
 import { formatDateForExport } from '../utils/projectUtils';
 import { calculateTax } from '../utils/taxUtils';
@@ -96,66 +96,70 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
   }
 
   return (
-    <div className="glass rounded-3xl shadow-glass p-8 mb-12 animate-fade-in">
+    <div className="terminal-window shadow-neon-green p-6 mb-12 animate-fade-in">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-slate-800">Session History</h2>
+        <div className="flex items-center space-x-3">
+          <Activity className="w-6 h-6 neon-yellow animate-pulse" />
+          <h2 className="text-2xl font-cyber font-black neon-yellow tracking-wider">
+            SESSION ARCHIVE
+          </h2>
+        </div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center space-x-3 px-6 py-3 glass hover:shadow-soft rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold text-slate-700"
+          className={`cyber-button flex items-center space-x-3 px-6 py-3 border-cyber-yellow text-cyber-yellow hover:bg-cyber-yellow hover:text-black transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
         >
           {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          <span>{isExpanded ? 'Collapse' : 'Expand'}</span>
+          <span>{isExpanded ? 'COLLAPSE' : 'EXPAND'}</span>
         </button>
       </div>
 
-      {/* Summary Stats */}
-      <div className={`grid grid-cols-1 ${taxSettings.includeInDisplays && totalEarnings > 0 ? 'md:grid-cols-2 lg:grid-cols-5' : 'md:grid-cols-3'} gap-6 mb-8`}>
-        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
-          <div className="flex items-center space-x-3 text-primary-600 mb-3">
-            <div className="p-2 bg-primary-100 rounded-xl">
-              <Calendar size={20} />
-            </div>
-            <span className="font-semibold">Total Sessions</span>
+      {/* Summary Stats Grid */}
+      <div className={`grid grid-cols-1 ${taxSettings.includeInDisplays && totalEarnings > 0 ? 'md:grid-cols-2 lg:grid-cols-5' : 'md:grid-cols-3'} gap-4 mb-8`}>
+        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 mb-3">
+            <Calendar className="w-5 h-5 text-matrix-500 animate-pulse" />
+            <span className="font-mono font-bold text-matrix-600 tracking-wider text-sm">SESSIONS</span>
           </div>
-          <p className="text-3xl font-bold text-slate-800">{totalSessions}</p>
+          <p className="text-3xl font-cyber font-black matrix-text">{totalSessions}</p>
+          <p className="text-xs text-matrix-700 font-mono mt-1">TOTAL_COUNT</p>
         </div>
-        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
-          <div className="flex items-center space-x-3 text-accent-cyan mb-3">
-            <div className="p-2 bg-cyan-100 rounded-xl">
-              <Clock size={20} />
-            </div>
-            <span className="font-semibold">Total Time</span>
+        
+        <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 mb-3">
+            <Clock className="w-5 h-5 text-cyber-cyan animate-pulse" />
+            <span className="font-mono font-bold text-cyan-400 tracking-wider text-sm">TIME_LOG</span>
           </div>
-          <p className="text-3xl font-bold text-slate-800">{formatTime(totalTime)}</p>
+          <p className="text-3xl font-cyber font-black neon-cyan">{formatTime(totalTime)}</p>
+          <p className="text-xs text-cyan-300 font-mono mt-1">ACCUMULATED</p>
         </div>
-        <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
-          <div className="flex items-center space-x-3 text-accent-emerald mb-3">
-            <div className="p-2 bg-emerald-100 rounded-xl">
-              <DollarSign size={20} />
-            </div>
-            <span className="font-semibold">Total Earnings</span>
+        
+        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300 transform hover:scale-105">
+          <div className="flex items-center space-x-3 mb-3">
+            <DollarSign className="w-5 h-5 text-matrix-500 animate-pulse" />
+            <span className="font-mono font-bold text-matrix-600 tracking-wider text-sm">EARNINGS</span>
           </div>
-          <p className="text-3xl font-bold text-slate-800">${totalEarnings.toFixed(2)}</p>
+          <p className="text-3xl font-cyber font-black matrix-text">${totalEarnings.toFixed(2)}</p>
+          <p className="text-xs text-matrix-700 font-mono mt-1">GROSS_TOTAL</p>
         </div>
+        
         {taxSettings.includeInDisplays && totalEarnings > 0 && (
           <>
-            <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
-              <div className="flex items-center space-x-3 text-red-600 mb-3">
-                <div className="p-2 bg-red-100 rounded-xl">
-                  <Calculator size={20} />
-                </div>
-                <span className="font-semibold">Est. Taxes</span>
+            <div className="cyber-card p-6 hover:border-cyber-red transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-center space-x-3 mb-3">
+                <Calculator className="w-5 h-5 text-cyber-red animate-pulse" />
+                <span className="font-mono font-bold text-red-400 tracking-wider text-sm">TAX_EST</span>
               </div>
-              <p className="text-3xl font-bold text-slate-800">${totalTaxCalc.taxAmount.toFixed(2)}</p>
+              <p className="text-3xl font-cyber font-black text-cyber-red">${totalTaxCalc.taxAmount.toFixed(2)}</p>
+              <p className="text-xs text-red-300 font-mono mt-1">DEDUCTION</p>
             </div>
-            <div className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300 transform hover:scale-105">
-              <div className="flex items-center space-x-3 text-green-600 mb-3">
-                <div className="p-2 bg-green-100 rounded-xl">
-                  <DollarSign size={20} />
-                </div>
-                <span className="font-semibold">After Taxes</span>
+            
+            <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300 transform hover:scale-105">
+              <div className="flex items-center space-x-3 mb-3">
+                <Zap className="w-5 h-5 text-cyber-cyan animate-pulse" />
+                <span className="font-mono font-bold text-cyan-400 tracking-wider text-sm">NET_TOTAL</span>
               </div>
-              <p className="text-3xl font-bold text-slate-800">${totalTaxCalc.netEarnings.toFixed(2)}</p>
+              <p className="text-3xl font-cyber font-black neon-cyan">${totalTaxCalc.netEarnings.toFixed(2)}</p>
+              <p className="text-xs text-cyan-300 font-mono mt-1">AFTER_TAX</p>
             </div>
           </>
         )}
@@ -166,18 +170,18 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
           {/* Filter Dropdown */}
           {projects.length > 1 && (
             <div className="mb-6">
-              <label className="block text-sm font-bold text-slate-700 mb-3">
-                Filter by Project:
+              <label className="block text-sm font-mono font-bold matrix-text mb-3 tracking-wider">
+                FILTER_PROJECT:
               </label>
               <select
                 value={selectedProject}
                 onChange={(e) => setSelectedProject(e.target.value)}
-                className="px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+                className="cyber-input px-4 py-3 text-sm font-mono"
               >
-                <option value="all">All Projects</option>
+                <option value="all">ALL_PROJECTS</option>
                 {projects.map(project => (
                   <option key={project.id} value={project.id}>
-                    {project.name}
+                    {project.name.toUpperCase()}
                   </option>
                 ))}
               </select>
@@ -187,47 +191,59 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
           {/* Time Blocks List */}
           <div className="space-y-6 max-h-96 overflow-y-auto">
             {totalSessions === 0 ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center">
-                  <Clock size={32} className="text-slate-500" />
+              <div className="text-center py-16">
+                <div className="w-20 h-20 mx-auto mb-6 border-2 border-dashed border-matrix-600 rounded-lg flex items-center justify-center">
+                  <Clock size={32} className="text-matrix-600 animate-pulse" />
                 </div>
-                <p className="text-slate-500 text-lg font-medium">
-                  No time sessions recorded yet. Start tracking to see your history!
+                <p className="matrix-text text-lg font-mono font-bold mb-2">
+                  &gt; NO SESSION DATA FOUND
+                </p>
+                <p className="text-matrix-600 text-sm font-mono">
+                  Initialize timer to generate session archives
                 </p>
               </div>
             ) : (
               Object.entries(groupedBlocks).map(([date, blocks]) => (
-                <div key={date} className="glass rounded-2xl p-6 hover:shadow-soft transition-all duration-300">
-                  <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center">
-                    <div className="w-2 h-2 bg-gradient-primary rounded-full mr-3"></div>
-                    {date}
-                  </h3>
+                <div key={date} className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300">
+                  <div className="flex items-center space-x-3 mb-6">
+                    <div className="w-3 h-3 bg-matrix-500 rounded-full animate-pulse"></div>
+                    <h3 className="text-lg font-cyber font-bold matrix-text tracking-wider">
+                      {date.toUpperCase()}
+                    </h3>
+                  </div>
+                  
                   <div className="space-y-3">
                     {blocks.map(block => (
                       <div 
                         key={block.id} 
-                        className="flex justify-between items-center p-4 glass rounded-xl hover:shadow-soft transition-all duration-300"
+                        className="terminal-window p-4 hover:border-matrix-500 transition-all duration-300"
                       >
-                        <div>
-                          <p className="font-bold text-slate-800 mb-1">{block.projectName}</p>
-                          <p className="text-sm text-slate-600">
-                            {formatDateTime(new Date(block.startTime))} - {formatDateTime(new Date(block.endTime))}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-slate-800">{formatTime(block.duration)}</p>
-                          <p className="text-sm text-accent-emerald font-bold">${block.earnings.toFixed(2)}</p>
-                          <p className="text-xs text-slate-500">${block.rate}/hr</p>
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <p className="font-mono font-bold matrix-text mb-1 tracking-wider">
+                              {block.projectName.toUpperCase()}
+                            </p>
+                            <p className="text-sm text-matrix-600 font-mono">
+                              {formatDateTime(new Date(block.startTime))} → {formatDateTime(new Date(block.endTime))}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-mono font-bold matrix-text">{formatTime(block.duration)}</p>
+                            <p className="text-sm neon-cyan font-mono font-bold">${block.earnings.toFixed(2)}</p>
+                            <p className="text-xs text-matrix-600 font-mono">${block.rate}/HR</p>
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4 pt-4 border-t border-white/20">
-                    <div className="flex justify-between text-sm font-bold text-slate-700">
-                      <span>Day Total:</span>
+                  
+                  {/* Day Total */}
+                  <div className="mt-6 pt-4 border-t-2 border-matrix-800">
+                    <div className="flex justify-between text-sm font-mono font-bold">
+                      <span className="matrix-text tracking-wider">DAY_TOTAL:</span>
                       <span className="text-right">
-                        <div>{formatTime(blocks.reduce((sum, b) => sum + b.duration, 0))}</div>
-                        <div className="text-accent-emerald">${blocks.reduce((sum, b) => sum + b.earnings, 0).toFixed(2)}</div>
+                        <div className="matrix-text">{formatTime(blocks.reduce((sum, b) => sum + b.duration, 0))}</div>
+                        <div className="neon-cyan">${blocks.reduce((sum, b) => sum + b.earnings, 0).toFixed(2)}</div>
                       </span>
                     </div>
                   </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit2, Check, X, Trash2, ChevronDown, ChevronUp, MoreVertical } from 'lucide-react';
+import { Plus, Edit2, Check, X, Trash2, ChevronDown, ChevronUp, MoreVertical, Database, Zap, Shield } from 'lucide-react';
 import { Project } from '../types';
 import { getProjectGradientClasses } from '../utils/gradientUtils';
 import ConfirmDialog from './ConfirmDialog';
@@ -62,14 +62,20 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
       if (exists) {
         setNotification({
           isOpen: true,
-          title: 'Duplicate Project Name',
-          message: 'A project with this name already exists. Please choose a different name.',
+          title: '[ERROR] Duplicate Entry',
+          message: 'Project name already exists in Matrix database. Select unique identifier.',
           type: 'error'
         });
         return;
       }
       
       onProjectCreate(newProjectName.trim(), rate);
+      setNotification({
+        isOpen: true,
+        title: '[SUCCESS] Project Created',
+        message: `Project "${newProjectName.trim()}" has been added to the Matrix database.`,
+        type: 'success'
+      });
       setNewProjectName('');
       setNewProjectRate('');
       setIsCreating(false);
@@ -95,8 +101,8 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
       if (exists) {
         setNotification({
           isOpen: true,
-          title: 'Duplicate Project Name',
-          message: 'A project with this name already exists. Please choose a different name.',
+          title: '[ERROR] Duplicate Entry',
+          message: 'Project name already exists in Matrix database. Select unique identifier.',
           type: 'error'
         });
         return;
@@ -106,6 +112,12 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
         ...project,
         name: editName.trim(),
         rate: rate
+      });
+      setNotification({
+        isOpen: true,
+        title: '[SUCCESS] Project Updated',
+        message: `Project data successfully modified in Matrix database.`,
+        type: 'success'
       });
       setEditingProject(null);
     }
@@ -121,8 +133,8 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
     setShowProjectActions(null);
     setConfirmDialog({
       isOpen: true,
-      title: 'Delete Project',
-      message: `Are you sure you want to delete "${projectName}"? This will permanently remove all time tracking data for this project.`,
+      title: '[WARNING] Delete Project',
+      message: `Confirm deletion of project "${projectName}" from Matrix database. This will permanently erase all time tracking data and cannot be undone.`,
       onConfirm: () => {
         onProjectDelete(projectId);
         setExpandedProject(null);
@@ -167,8 +179,8 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
   const handleTimeBlockDelete = (projectId: string, blockId: string) => {
     setConfirmDialog({
       isOpen: true,
-      title: 'Delete Session',
-      message: 'Are you sure you want to delete this session? This action cannot be undone.',
+      title: '[WARNING] Delete Session',
+      message: 'Confirm deletion of time block from Matrix database. This operation cannot be reversed.',
       onConfirm: () => {
         onTimeBlockDelete?.(projectId, blockId);
         setConfirmDialog({ isOpen: false, title: '', message: '', onConfirm: () => {} });
@@ -187,48 +199,61 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
   };
 
   return (
-    <div className="glass rounded-3xl shadow-glass p-4 sm:p-8 mb-12 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 space-y-4 sm:space-y-0">
-        <h2 className="text-2xl font-bold text-slate-800">Projects</h2>
+    <div className="terminal-window shadow-neon-green p-6 mb-12 animate-fade-in">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 space-y-4 sm:space-y-0">
+        <div className="flex items-center space-x-3">
+          <Database className="w-6 h-6 matrix-text animate-pulse" />
+          <h2 className="text-2xl font-cyber font-black matrix-text tracking-wider">
+            PROJECT DATABASE
+          </h2>
+        </div>
         <button
           onClick={() => setIsCreating(true)}
-          className="flex items-center justify-center space-x-3 px-6 py-3 bg-gradient-primary hover:shadow-elevated text-white rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold w-full sm:w-auto"
+          className="cyber-button flex items-center justify-center space-x-3 px-6 py-3 w-full sm:w-auto"
         >
           <Plus size={18} />
-          <span>Add Project</span>
+          <span>NEW PROJECT</span>
         </button>
       </div>
 
       {/* Create New Project Form */}
       {isCreating && (
-        <form onSubmit={handleCreateSubmit} className="mb-6 p-4 sm:p-6 glass rounded-2xl">
+        <form onSubmit={handleCreateSubmit} className="mb-6 cyber-card p-6">
+          <div className="border-l-4 border-matrix-500 pl-4 mb-6">
+            <h3 className="text-lg font-cyber font-bold matrix-text tracking-wide">
+              &gt; CREATE_PROJECT.EXE
+            </h3>
+            <p className="text-sm text-matrix-600 font-mono mt-1">
+              Initialize new project in Matrix database
+            </p>
+          </div>
           <div className="space-y-4">
             <input
               type="text"
-              placeholder="Project name"
+              placeholder="PROJECT_NAME"
               value={newProjectName}
               onChange={(e) => setNewProjectName(e.target.value)}
-              className="w-full px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+              className="cyber-input w-full"
               required
             />
             <input
               type="number"
-              placeholder="Hourly rate ($)"
+              placeholder="HOURLY_RATE ($)"
               value={newProjectRate}
               onChange={(e) => setNewProjectRate(e.target.value)}
               min="0"
               step="0.01"
-              className="w-full px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+              className="cyber-input w-full"
               required
             />
           </div>
-          <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mt-4">
+          <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mt-6">
             <button
               type="submit"
-              className="flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-success hover:shadow-elevated text-white rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
+              className="cyber-button border-matrix-500 text-matrix-500 hover:bg-matrix-500 hover:text-black flex items-center justify-center space-x-2"
             >
               <Check size={18} />
-              <span>Create</span>
+              <span>EXECUTE</span>
             </button>
             <button
               type="button"
@@ -237,10 +262,10 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                 setNewProjectName('');
                 setNewProjectRate('');
               }}
-              className="flex items-center justify-center space-x-2 px-6 py-3 glass hover:shadow-soft text-slate-700 rounded-2xl transition-all duration-300 transform hover:scale-105 font-semibold"
+              className="cyber-button border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black flex items-center justify-center space-x-2"
             >
               <X size={18} />
-              <span>Cancel</span>
+              <span>ABORT</span>
             </button>
           </div>
         </form>
@@ -249,36 +274,46 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
       {/* Projects List */}
       <div className="space-y-4">
         {projects.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center">
-              <Plus size={32} className="text-slate-500" />
+          <div className="text-center py-16">
+            <div className="w-20 h-20 mx-auto mb-6 border-2 border-dashed border-matrix-500 rounded-lg flex items-center justify-center">
+              <Database size={32} className="text-matrix-500 animate-pulse" />
             </div>
-            <p className="text-slate-500 text-lg font-medium">
-              No projects yet. Create your first project to get started!
+            <p className="matrix-text text-lg font-mono font-bold mb-2">
+              &gt; DATABASE EMPTY
+            </p>
+            <p className="text-matrix-600 text-sm font-mono">
+              Initialize first project to begin Matrix operations
             </p>
           </div>
         ) : (
           projects.map((project, index) => {
-            const gradientClasses = getProjectGradientClasses(index);
             const isSelected = currentProject?.id === project.id;
             
             return (
             <div
               key={project.id}
-              className={`rounded-2xl border-2 transition-all duration-300 ${
+              className={`cyber-card transition-all duration-300 ${
                 isSelected
-                  ? `bg-white shadow-sm hover:shadow-md ${gradientClasses.border}`
-                  : 'bg-slate-100 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                  ? 'border-matrix-500 shadow-neon-green'
+                  : 'border-terminal-medium hover:border-matrix-600'
               }`}
             >
               {editingProject === project.id ? (
-                <div className="p-4 sm:p-6">
+                <div className="p-6">
+                  <div className="border-l-4 border-cyber-cyan pl-4 mb-6">
+                    <h3 className="text-lg font-cyber font-bold neon-cyan tracking-wide">
+                      &gt; EDIT_PROJECT.EXE
+                    </h3>
+                    <p className="text-sm text-cyan-400 font-mono mt-1">
+                      Modify project data in Matrix database
+                    </p>
+                  </div>
                   <div className="space-y-4">
                     <input
                       type="text"
                       value={editName}
                       onChange={(e) => setEditName(e.target.value)}
-                      className="w-full px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+                      className="cyber-input w-full"
                       onClick={(e) => e.stopPropagation()}
                     />
                     <input
@@ -287,43 +322,43 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                       onChange={(e) => setEditRate(e.target.value)}
                       min="0"
                       step="0.01"
-                      className="w-full px-4 py-3 glass rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-300 text-slate-800 font-medium"
+                      className="cyber-input w-full"
                       onClick={(e) => e.stopPropagation()}
                     />
                   </div>
-                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mt-4">
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 mt-6">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleEditSubmit(project);
                       }}
-                      className="flex items-center justify-center space-x-2 px-4 py-2 bg-gradient-success hover:shadow-soft text-white rounded-xl text-sm transition-all duration-300 transform hover:scale-105 font-semibold"
+                      className="cyber-button border-matrix-500 text-matrix-500 hover:bg-matrix-500 hover:text-black flex items-center justify-center space-x-2"
                     >
                       <Check size={16} />
-                      <span>Save</span>
+                      <span>SAVE</span>
                     </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         handleEditCancel();
                       }}
-                      className="flex items-center justify-center space-x-2 px-4 py-2 glass hover:shadow-soft text-slate-700 rounded-xl text-sm transition-all duration-300 transform hover:scale-105 font-semibold"
+                      className="cyber-button border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black flex items-center justify-center space-x-2"
                     >
                       <X size={16} />
-                      <span>Cancel</span>
+                      <span>CANCEL</span>
                     </button>
                   </div>
                 </div>
               ) : (
                 <>
                   <div 
-                    className={`p-4 sm:p-6 ${isTimerRunning && currentProject?.id !== project.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                    className={`p-6 ${isTimerRunning && currentProject?.id !== project.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                     onClick={() => {
                       if (isTimerRunning && currentProject?.id !== project.id) {
                         setNotification({
                           isOpen: true,
-                          title: 'Timer is Running',
-                          message: 'Cannot switch projects while timer is running. Please stop the timer first.',
+                          title: '[ERROR] Timer Active',
+                          message: 'Cannot switch projects while neural link is active. Terminate current session first.',
                           type: 'warning'
                         });
                         return;
@@ -333,52 +368,52 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1 min-w-0">
-                        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-3">
-                          <h3 className={`text-lg font-bold truncate ${
-                            currentProject?.id === project.id ? 'text-slate-800' : 'text-slate-600'
-                          }`}>{project.name}</h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-4">
+                          <h3 className={`text-xl font-cyber font-black truncate tracking-wider ${
+                            currentProject?.id === project.id ? 'matrix-text glitch-text' : 'text-matrix-600'
+                          }`}>
+                            {project.name.toUpperCase()}
+                          </h3>
                           {currentProject?.id === project.id && (
-                            <span className={`px-3 py-1 text-white text-xs font-semibold rounded-full ${gradientClasses.background} whitespace-nowrap`}>ACTIVE</span>
+                            <span className="px-3 py-1 bg-matrix-500 text-black text-xs font-mono font-bold rounded border border-matrix-500 whitespace-nowrap animate-pulse">
+                              ACTIVE
+                            </span>
                           )}
                         </div>
                         
-                        {/* Project Stats - Mobile Responsive Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 text-sm">
-                          <span className={`flex items-center ${
-                            currentProject?.id === project.id ? 'text-slate-700' : 'text-slate-500'
-                          }`}>
-                            <span className={`font-semibold ${
-                              currentProject?.id === project.id ? 'text-primary-600' : 'text-primary-500'
-                            }`}>${project.rate}</span>/hour
-                          </span>
-                          <span className={`flex items-center ${
-                            currentProject?.id === project.id ? 'text-slate-700' : 'text-slate-500'
-                          }`}>
-                            <span className={`font-semibold ${
-                              currentProject?.id === project.id ? 'text-accent-cyan' : 'text-slate-600'
-                            }`}>{formatTimeSummary(project.totalTime)}</span> tracked
-                          </span>
-                          <span className={`flex items-center ${
-                            currentProject?.id === project.id ? 'text-slate-700' : 'text-slate-500'
-                          }`}>
-                            <span className={`font-semibold ${
-                              currentProject?.id === project.id ? 'text-accent-emerald' : 'text-slate-600'
-                            }`}>${project.totalEarnings.toFixed(2)}</span> earned
-                          </span>
-                          {taxSettings?.includeInDisplays && project.totalEarnings > 0 && (
-                            <span className={`flex items-center ${
-                              currentProject?.id === project.id ? 'text-slate-700' : 'text-slate-500'
-                            }`}>
-                              <span className={`font-semibold ${
-                                currentProject?.id === project.id ? 'text-green-600' : 'text-slate-600'
-                              }`}>${calculateTax(project.totalEarnings, taxSettings.taxRate).netEarnings.toFixed(2)}</span> after taxes
+                        {/* Project Stats - Cyber Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm font-mono">
+                          <div className="flex items-center space-x-2">
+                            <Zap className="w-4 h-4 text-cyber-yellow animate-pulse" />
+                            <span className={currentProject?.id === project.id ? 'neon-cyan' : 'text-matrix-600'}>
+                              <span className="font-bold">${project.rate}</span>/HR
                             </span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-2 h-2 bg-matrix-500 rounded-full animate-pulse"></div>
+                            <span className={currentProject?.id === project.id ? 'matrix-text' : 'text-matrix-600'}>
+                              <span className="font-bold">{formatTimeSummary(project.totalTime)}</span> LOGGED
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <div className="w-2 h-2 bg-cyber-cyan rounded-full animate-pulse"></div>
+                            <span className={currentProject?.id === project.id ? 'neon-cyan' : 'text-matrix-600'}>
+                              <span className="font-bold">${project.totalEarnings.toFixed(2)}</span> EARNED
+                            </span>
+                          </div>
+                          {taxSettings?.includeInDisplays && project.totalEarnings > 0 && (
+                            <div className="flex items-center space-x-2">
+                              <Shield className="w-4 h-4 text-cyber-purple animate-pulse" />
+                              <span className={currentProject?.id === project.id ? 'neon-purple' : 'text-matrix-600'}>
+                                <span className="font-bold">${calculateTax(project.totalEarnings, taxSettings.taxRate).netEarnings.toFixed(2)}</span> NET
+                              </span>
+                            </div>
                           )}
                         </div>
                       </div>
                       
-                      {/* Mobile-Friendly Actions */}
-                      <div className="flex items-center ml-2">
+                      {/* Cyber Actions */}
+                      <div className="flex items-center ml-4">
                         {/* Desktop: Individual buttons */}
                         <div className="hidden sm:flex items-center space-x-2">
                           <button
@@ -386,11 +421,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                               e.stopPropagation();
                               setExpandedProject(expandedProject === project.id ? null : project.id);
                             }}
-                            className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
-                              currentProject?.id === project.id
-                                ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                : 'bg-slate-200 text-slate-500 hover:bg-slate-300'
-                            }`}
+                            className="cyber-button p-2 border-matrix-600 text-matrix-600 hover:bg-matrix-600 hover:text-black"
                           >
                             {expandedProject === project.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                           </button>
@@ -399,11 +430,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                               e.stopPropagation();
                               handleEditStart(project);
                             }}
-                            className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
-                              currentProject?.id === project.id
-                                ? 'bg-slate-100 text-primary-600 hover:bg-slate-200'
-                                : 'bg-slate-200 text-primary-500 hover:bg-slate-300'
-                            }`}
+                            className="cyber-button p-2 border-cyber-cyan text-cyber-cyan hover:bg-cyber-cyan hover:text-black"
                           >
                             <Edit2 size={18} />
                           </button>
@@ -412,11 +439,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                               e.stopPropagation();
                               handleDeleteProject(project.id, project.name);
                             }}
-                            className={`p-3 rounded-xl transition-all duration-300 hover:scale-110 ${
-                              currentProject?.id === project.id
-                                ? 'bg-slate-100 text-red-500 hover:bg-slate-200'
-                                : 'bg-slate-200 text-red-400 hover:bg-slate-300'
-                            }`}
+                            className="cyber-button p-2 border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black"
                           >
                             <Trash2 size={18} />
                           </button>
@@ -429,48 +452,44 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                               e.stopPropagation();
                               setShowProjectActions(showProjectActions === project.id ? null : project.id);
                             }}
-                            className={`p-3 rounded-xl transition-all duration-300 ${
-                              currentProject?.id === project.id
-                                ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                                : 'bg-slate-200 text-slate-500 hover:bg-slate-300'
-                            }`}
+                            className="cyber-button p-2 border-matrix-600 text-matrix-600 hover:bg-matrix-600 hover:text-black"
                           >
                             <MoreVertical size={18} />
                           </button>
                           
                           {/* Dropdown Menu */}
                           {showProjectActions === project.id && (
-                            <div className="absolute right-0 top-full mt-2 w-48 glass rounded-xl shadow-glass border border-white/20 py-2 z-10">
+                            <div className="absolute right-0 top-full mt-2 w-56 terminal-window py-2 z-10 border-2 border-matrix-500">
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setExpandedProject(expandedProject === project.id ? null : project.id);
                                   setShowProjectActions(null);
                                 }}
-                                className="w-full px-4 py-3 text-left text-slate-700 hover:bg-slate-100 transition-colors flex items-center space-x-3"
+                                className="w-full px-4 py-3 text-left matrix-text hover:bg-matrix-500/20 transition-colors flex items-center space-x-3 font-mono"
                               >
                                 {expandedProject === project.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                <span>{expandedProject === project.id ? 'Hide Sessions' : 'Show Sessions'}</span>
+                                <span>{expandedProject === project.id ? 'HIDE SESSIONS' : 'SHOW SESSIONS'}</span>
                               </button>
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleEditStart(project);
                                 }}
-                                className="w-full px-4 py-3 text-left text-primary-600 hover:bg-slate-100 transition-colors flex items-center space-x-3"
+                                className="w-full px-4 py-3 text-left neon-cyan hover:bg-cyan-500/20 transition-colors flex items-center space-x-3 font-mono"
                               >
                                 <Edit2 size={16} />
-                                <span>Edit Project</span>
+                                <span>EDIT PROJECT</span>
                               </button>
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   handleDeleteProject(project.id, project.name);
                                 }}
-                                className="w-full px-4 py-3 text-left text-red-500 hover:bg-slate-100 transition-colors flex items-center space-x-3"
+                                className="w-full px-4 py-3 text-left text-cyber-red hover:bg-red-500/20 transition-colors flex items-center space-x-3 font-mono"
                               >
                                 <Trash2 size={16} />
-                                <span>Delete Project</span>
+                                <span>DELETE PROJECT</span>
                               </button>
                             </div>
                           )}
@@ -481,48 +500,53 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
 
                   {/* Expanded Project Details */}
                   {expandedProject === project.id && (
-                    <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-t border-white/20">
+                    <div className="px-6 pb-6 border-t-2 border-matrix-800">
                       <div className="mt-6">
                         {project.timeBlocks.length === 0 ? (
-                          <div className="text-center py-8">
-                            <div className="w-12 h-12 mx-auto mb-3 bg-gradient-to-br from-slate-200 to-slate-300 rounded-full flex items-center justify-center">
-                              <div className="w-6 h-6 bg-slate-400 rounded-full"></div>
+                          <div className="text-center py-12">
+                            <div className="w-16 h-16 mx-auto mb-4 border-2 border-dashed border-matrix-600 rounded-lg flex items-center justify-center">
+                              <div className="w-8 h-8 border-2 border-matrix-600 rounded-full animate-pulse"></div>
                             </div>
-                            <p className="text-slate-500 font-medium">
-                              No sessions recorded for this project yet.
+                            <p className="matrix-text font-mono font-bold mb-2">
+                              &gt; NO SESSIONS RECORDED
+                            </p>
+                            <p className="text-matrix-600 text-sm font-mono">
+                              Initialize timer to log session data
                             </p>
                           </div>
                         ) : (
                           <div className="space-y-4">
-                            <h4 className="font-bold text-slate-700 mb-4 flex items-center">
-                              <div className="w-2 h-2 bg-gradient-primary rounded-full mr-3"></div>
-                              Sessions ({project.timeBlocks.length})
-                            </h4>
+                            <div className="flex items-center space-x-3 mb-6">
+                              <div className="w-3 h-3 bg-matrix-500 rounded-full animate-pulse"></div>
+                              <h4 className="font-cyber font-bold matrix-text tracking-wider">
+                                SESSION LOG ({project.timeBlocks.length})
+                              </h4>
+                            </div>
                             <div className="space-y-3">
                               {project.timeBlocks
                                 .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
                                 .map((block) => (
-                                <div key={block.id} className="glass rounded-xl p-4 hover:shadow-sm transition-all duration-300 group">
-                                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-2 sm:space-y-0">
+                                <div key={block.id} className="terminal-window p-4 hover:border-matrix-500 transition-all duration-300 group">
+                                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-3 sm:space-y-0">
                                     <div className="flex-1 min-w-0">
-                                      <p className="text-slate-800 font-medium text-sm sm:text-base">
-                                        {formatDateTime(new Date(block.startTime))} - {formatDateTime(new Date(block.endTime))}
+                                      <p className="matrix-text font-mono font-bold text-sm mb-1">
+                                        {formatDateTime(new Date(block.startTime))} → {formatDateTime(new Date(block.endTime))}
                                       </p>
-                                      <p className="text-slate-500 text-xs sm:text-sm mt-1">
-                                        {new Date(block.startTime).toLocaleDateString()}
+                                      <p className="text-matrix-600 font-mono text-xs">
+                                        DATE: {new Date(block.startTime).toLocaleDateString()}
                                       </p>
                                     </div>
-                                    <div className="flex items-center justify-between sm:justify-end space-x-3">
-                                      <div className="text-left sm:text-right">
-                                        <p className="font-bold text-slate-800 text-sm sm:text-base">{formatTime(block.duration)}</p>
-                                        <p className="text-accent-emerald font-bold text-xs sm:text-sm">${block.earnings.toFixed(2)}</p>
+                                    <div className="flex items-center justify-between sm:justify-end space-x-4">
+                                      <div className="text-right">
+                                        <p className="font-mono font-bold matrix-text text-sm">{formatTime(block.duration)}</p>
+                                        <p className="neon-cyan font-mono font-bold text-xs">${block.earnings.toFixed(2)}</p>
                                       </div>
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           handleTimeBlockDelete(project.id, block.id);
                                         }}
-                                        className="opacity-70 sm:opacity-0 group-hover:opacity-100 p-2 glass rounded-lg text-red-500 hover:text-red-700 transition-all duration-300 hover:scale-110"
+                                        className="opacity-70 sm:opacity-0 group-hover:opacity-100 cyber-button p-2 border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black"
                                         title="Delete session"
                                       >
                                         <Trash2 size={14} />
@@ -560,8 +584,8 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
         message={confirmDialog.message}
         onConfirm={confirmDialog.onConfirm}
         onCancel={() => setConfirmDialog({ isOpen: false, title: '', message: '', onConfirm: () => {} })}
-        confirmText="Delete"
-        cancelText="Cancel"
+        confirmText="EXECUTE"
+        cancelText="ABORT"
         type="danger"
       />
       

@@ -28,7 +28,6 @@ function App() {
     }
   }, [projects, currentProject]);
 
-
   const handleProjectCreate = (name: string, rate: number) => {
     const newProject = createProject(name, rate);
     const updatedProjects = [...projects, newProject];
@@ -93,77 +92,157 @@ function App() {
 
     handleProjectUpdate(updatedProject);
   };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-100 via-purple-50 to-slate-50 relative overflow-hidden" style={{backgroundColor: '#dad3f4'}}>
-      {/* Animated Background Orbs */}
+    <div className="min-h-screen bg-black matrix-bg relative overflow-hidden crt-effect">
+      {/* Matrix Rain Background Effect */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        {/* Large floating orbs */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-gradient-to-br from-purple-200/10 to-pink-200/8 rounded-full filter blur-3xl animate-float"></div>
-        <div className="absolute top-1/3 -left-48 w-80 h-80 bg-gradient-to-br from-blue-200/8 to-cyan-200/6 rounded-full filter blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-gradient-to-br from-indigo-200/6 to-purple-200/8 rounded-full filter blur-3xl animate-float" style={{animationDelay: '4s'}}></div>
+        {/* Matrix Grid Overlay */}
+        <div className="absolute inset-0 matrix-grid opacity-20"></div>
         
-        {/* Smaller accent orbs */}
-        <div className="absolute top-1/4 right-1/3 w-32 h-32 bg-gradient-to-br from-pink-200/12 to-rose-200/10 rounded-full filter blur-2xl animate-float" style={{animationDelay: '1s'}}></div>
-        <div className="absolute bottom-1/3 left-1/4 w-40 h-40 bg-gradient-to-br from-cyan-200/8 to-blue-200/6 rounded-full filter blur-2xl animate-float" style={{animationDelay: '3s'}}></div>
+        {/* Floating Matrix Code Streams */}
+        <div className="absolute top-0 left-[10%] w-px h-full bg-gradient-to-b from-transparent via-matrix-500 to-transparent animate-matrix-rain opacity-60" style={{animationDelay: '0s'}}></div>
+        <div className="absolute top-0 left-[25%] w-px h-full bg-gradient-to-b from-transparent via-cyber-cyan to-transparent animate-matrix-rain opacity-40" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-0 left-[40%] w-px h-full bg-gradient-to-b from-transparent via-matrix-500 to-transparent animate-matrix-rain opacity-50" style={{animationDelay: '2s'}}></div>
+        <div className="absolute top-0 left-[55%] w-px h-full bg-gradient-to-b from-transparent via-cyber-purple to-transparent animate-matrix-rain opacity-30" style={{animationDelay: '0.5s'}}></div>
+        <div className="absolute top-0 left-[70%] w-px h-full bg-gradient-to-b from-transparent via-matrix-500 to-transparent animate-matrix-rain opacity-70" style={{animationDelay: '1.5s'}}></div>
+        <div className="absolute top-0 left-[85%] w-px h-full bg-gradient-to-b from-transparent via-cyber-cyan to-transparent animate-matrix-rain opacity-35" style={{animationDelay: '2.5s'}}></div>
         
-        {/* Subtle grid pattern overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent"></div>
+        {/* Cyber Circuit Patterns */}
+        <div className="absolute top-20 right-20 w-32 h-32 border-2 border-matrix-500 border-dashed opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-40 left-16 w-24 h-24 border-2 border-cyber-cyan border-dashed opacity-20 animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/2 right-1/4 w-16 h-16 border-2 border-cyber-purple border-dashed opacity-25 animate-pulse" style={{animationDelay: '2s'}}></div>
+        
+        {/* Glowing Orbs */}
+        <div className="absolute top-32 left-1/4 w-4 h-4 bg-matrix-500 rounded-full shadow-neon-green animate-matrix-glow opacity-80"></div>
+        <div className="absolute bottom-1/3 right-1/3 w-3 h-3 bg-cyber-cyan rounded-full shadow-neon-cyan animate-matrix-glow opacity-60" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-2/3 left-3/4 w-2 h-2 bg-cyber-purple rounded-full shadow-neon-purple animate-matrix-glow opacity-70" style={{animationDelay: '0.5s'}}></div>
+        
+        {/* Scanlines Effect */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-matrix-500/5 to-transparent animate-scan-line"></div>
       </div>
       
-      <div className="relative z-10 container mx-auto px-4 py-12 max-w-5xl">
-        <header className="text-left mb-12 animate-fade-in">
-          <h1 className="text-3xl font-black bg-gradient-to-r from-slate-700 via-purple-700 to-indigo-700 bg-clip-text text-transparent tracking-tight">
-            Time Tracker
-          </h1>
-        </header>
+      <div className="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
         
-        <EnhancedTimer
-          currentProject={currentProject}
-          projects={projects}
-          taxSettings={taxSettings}
-          onSessionComplete={handleSessionComplete}
-          onTimerStateChange={setIsTimerRunning}
-        />
+        {/* Main Interface Grid */}
+        <div className="space-y-8">
+          {/* Timer Section */}
+          <section className="cyber-card animate-scale-in">
+            <div className="border-l-4 border-matrix-500 pl-4 mb-6">
+              <h2 className="text-xl font-cyber font-bold matrix-text tracking-wide">
+                &gt; TIMER_MODULE.EXE
+              </h2>
+              <p className="text-sm text-matrix-600 font-mono mt-1">
+                Neural time tracking interface
+              </p>
+            </div>
+            <EnhancedTimer
+              currentProject={currentProject}
+              projects={projects}
+              taxSettings={taxSettings}
+              onSessionComplete={handleSessionComplete}
+              onTimerStateChange={setIsTimerRunning}
+            />
+          </section>
+          
+          {/* Project Manager Section */}
+          <section className="cyber-card animate-scale-in" style={{animationDelay: '0.1s'}}>
+            <div className="border-l-4 border-cyber-cyan pl-4 mb-6">
+              <h2 className="text-xl font-cyber font-bold neon-cyan tracking-wide">
+                &gt; PROJECT_MATRIX.DB
+              </h2>
+              <p className="text-sm text-cyan-400 font-mono mt-1">
+                Client database management system
+              </p>
+            </div>
+            <ProjectManager
+              projects={projects}
+              currentProject={currentProject}
+              isTimerRunning={isTimerRunning}
+              taxSettings={taxSettings}
+              onProjectSelect={handleProjectSelect}
+              onProjectCreate={handleProjectCreate}
+              onProjectUpdate={handleProjectUpdate}
+              onProjectDelete={handleProjectDelete}
+              onTimeBlockDelete={handleTimeBlockDelete}
+            />
+          </section>
+          
+          {/* Tax Settings Section */}
+          <section className="cyber-card animate-scale-in" style={{animationDelay: '0.2s'}}>
+            <div className="border-l-4 border-cyber-purple pl-4 mb-6">
+              <h2 className="text-xl font-cyber font-bold neon-purple tracking-wide">
+                &gt; TAX_CALC.SYS
+              </h2>
+              <p className="text-sm text-purple-400 font-mono mt-1">
+                Financial calculation protocols
+              </p>
+            </div>
+            <TaxSettings
+              taxSettings={taxSettings}
+              onTaxSettingsChange={setTaxSettings}
+              sampleEarnings={currentProject?.totalEarnings || 1000}
+            />
+          </section>
+          
+          {/* History Section */}
+          <section className="cyber-card animate-scale-in" style={{animationDelay: '0.3s'}}>
+            <div className="border-l-4 border-cyber-yellow pl-4 mb-6">
+              <h2 className="text-xl font-cyber font-bold neon-yellow tracking-wide">
+                &gt; HISTORY_LOG.DAT
+              </h2>
+              <p className="text-sm text-yellow-400 font-mono mt-1">
+                Temporal data archive access
+              </p>
+            </div>
+            <TimeBlockHistory
+              projects={projects}
+              currentProject={currentProject}
+              taxSettings={taxSettings}
+            />
+          </section>
+          
+          {/* Export Section */}
+          <section className="cyber-card animate-scale-in" style={{animationDelay: '0.4s'}}>
+            <div className="border-l-4 border-matrix-600 pl-4 mb-6">
+              <h2 className="text-xl font-cyber font-bold text-matrix-600 tracking-wide">
+                &gt; EXPORT_STREAM.CSV
+              </h2>
+              <p className="text-sm text-matrix-700 font-mono mt-1">
+                Data transmission protocols
+              </p>
+            </div>
+            <ExportManager
+              projects={projects}
+              taxSettings={taxSettings}
+            />
+          </section>
+        </div>
         
-        <ProjectManager
-          projects={projects}
-          currentProject={currentProject}
-          isTimerRunning={isTimerRunning}
-          taxSettings={taxSettings}
-          onProjectSelect={handleProjectSelect}
-          onProjectCreate={handleProjectCreate}
-          onProjectUpdate={handleProjectUpdate}
-          onProjectDelete={handleProjectDelete}
-          onTimeBlockDelete={handleTimeBlockDelete}
-        />
-        
-        <TaxSettings
-          taxSettings={taxSettings}
-          onTaxSettingsChange={setTaxSettings}
-          sampleEarnings={currentProject?.totalEarnings || 1000}
-        />
-        
-        <TimeBlockHistory
-          projects={projects}
-          currentProject={currentProject}
-          taxSettings={taxSettings}
-        />
-        
-        <ExportManager
-          projects={projects}
-          taxSettings={taxSettings}
-        />
-        
-        <footer className="mt-16 text-center text-slate-300 text-sm animate-fade-in">
-          <div className="glass rounded-xl p-6 max-w-md mx-auto border border-white/10">
-            <p className="font-medium text-slate-300">
-              Built with React + TypeScript
-            </p>
-            <p className="text-xs mt-1 opacity-75">
-              Data stored securely in your browser
-            </p>
+        {/* Matrix Footer */}
+        <footer className="mt-16 text-center animate-fade-in">
+          <div className="terminal-window p-6 max-w-md mx-auto">
+            <div className="text-matrix-500 font-mono text-sm">
+              <div className="mb-2">
+                <span className="text-cyber-cyan">[SYSTEM]</span> React + TypeScript
+              </div>
+              <div className="mb-2">
+                <span className="text-cyber-purple">[STORAGE]</span> Local Neural Network
+              </div>
+              <div className="text-xs opacity-75 mt-4 border-t border-matrix-800 pt-3">
+                &gt; Connection established to Matrix mainframe_
+                <span className="animate-pulse">|</span>
+              </div>
+            </div>
           </div>
         </footer>
+      </div>
+      
+      {/* Matrix Code Rain Effect */}
+      <div className="fixed bottom-4 right-4 font-mono text-xs text-matrix-500 opacity-50 pointer-events-none">
+        <div className="animate-type-in overflow-hidden whitespace-nowrap">
+          01001000 01100101 01101100 01101100 01101111
+        </div>
       </div>
     </div>
   );
