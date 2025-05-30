@@ -109,7 +109,7 @@ function App() {
         <section className="cyber-card animate-scale-in mb-8" style={{animationDelay: '0s'}}>
           <div className="border-l-4 border-matrix-500 pl-4 mb-6">
             <h1 className="text-xl font-cyber font-bold matrix-text tracking-wide">
-              &gt; TIMER_MODULE.EXE
+              &gt; TIMER_TERMINAL.EXE
             </h1>
             <p className="text-sm text-matrix-600 font-mono mt-1">
               Neural time tracking interface

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono:wght@400&family=Iceland:wght@400&family=JetBrains+Mono:wght@400;700;800&family=Fira+Code:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono:wght@400&family=Iceland:wght@400&family=JetBrains+Mono:wght@400;700;800&family=Fira+Code:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Martian+Mono:wght@300;400;700&family=Sixtyfour:wght@400&display=swap');
 
 /* Digital Clock Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Electrolize:wght@400&family=Seven+Segment:wght@400&display=swap');
@@ -202,10 +202,10 @@ body {
   
   /* CSS-Based 7-Segment Style - CLEAN VERSION */
   .digital-clock-segments {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
-    font-weight: 800;
+    font-family: 'Sixtyfour', 'Martian Mono', 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-weight: 400;
     font-size: 6rem;
-    letter-spacing: 0.15em;
+    letter-spacing: -0.05em;
     color: var(--matrix-green);
     text-shadow: 
       0 0 5px var(--matrix-green),
@@ -217,14 +217,18 @@ body {
     /* Remove blur effects that cause issues */
     filter: none;
     /* Ensure consistent spacing */
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Sixtyfour', monospace;
+    /* Force width constraints */
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
   }
   
   /* Responsive sizing for digital clock */
   @media (max-width: 640px) {
     .digital-clock-segments {
-      font-size: 3rem;
-      letter-spacing: 0.1em;
+      font-size: 2.2rem !important;
+      letter-spacing: -0.1em !important;
     }
   }
   
@@ -411,11 +415,6 @@ body {
     font-size: 2rem;
     letter-spacing: 0.1em;
     padding: 15px;
-  }
-  
-  .digital-clock-segments {
-    font-size: 2.5rem;
-    letter-spacing: 0.08em;
   }
   
   .cyber-button {

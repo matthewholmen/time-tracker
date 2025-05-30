@@ -209,27 +209,27 @@ const TaxSettingsComponent: React.FC<TaxSettingsComponentProps> = ({
             
             <div className="space-y-4">
               <div className="cyber-card p-4 hover:border-matrix-500 transition-all duration-300">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
+                <div className="flex items-start sm:items-center justify-between flex-col sm:flex-row space-y-3 sm:space-y-0">
+                  <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
                     {taxSettings.includeInDisplays ? 
-                      <Eye className="w-6 h-6 text-matrix-500 animate-pulse" /> : 
-                      <EyeOff className="w-6 h-6 text-terminal-medium" />
+                      <Eye className="w-5 h-5 sm:w-6 sm:h-6 text-matrix-500 animate-pulse flex-shrink-0" /> : 
+                      <EyeOff className="w-5 h-5 sm:w-6 sm:h-6 text-terminal-medium flex-shrink-0" />
                     }
-                    <div>
-                      <p className="font-mono font-bold matrix-text tracking-wider">UI_INTEGRATION</p>
-                      <p className="text-sm text-matrix-600 font-mono">Display tax estimates in neural interface</p>
+                    <div className="min-w-0">
+                      <p className="font-mono font-bold matrix-text tracking-wider text-sm sm:text-base">UI_INTEGRATION</p>
+                      <p className="text-xs sm:text-sm text-matrix-600 font-mono">Display tax estimates in neural interface</p>
                     </div>
                   </div>
                   <button
                     onClick={handleDisplayToggle}
-                    className={`relative inline-flex h-8 w-16 items-center rounded-full border-2 transition-colors focus:outline-none ${
+                    className={`relative inline-flex h-6 w-12 sm:h-8 sm:w-16 items-center rounded-full border-2 transition-colors focus:outline-none flex-shrink-0 ${
                       taxSettings.includeInDisplays ? 'border-matrix-500 bg-matrix-500/20' : 'border-terminal-medium bg-terminal-medium/20'
                     }`}
                   >
                     <span
-                      className={`inline-block h-6 w-6 transform rounded-full transition-transform ${
+                      className={`inline-block h-4 w-4 sm:h-6 sm:w-6 transform rounded-full transition-transform ${
                         taxSettings.includeInDisplays 
-                          ? 'translate-x-8 bg-matrix-500 shadow-neon-green' 
+                          ? 'translate-x-6 sm:translate-x-8 bg-matrix-500 shadow-neon-green' 
                           : 'translate-x-1 bg-terminal-medium'
                       }`}
                     />
@@ -238,24 +238,24 @@ const TaxSettingsComponent: React.FC<TaxSettingsComponentProps> = ({
               </div>
               
               <div className="cyber-card p-4 hover:border-cyber-cyan transition-all duration-300">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <FileText className={`w-6 h-6 ${taxSettings.includeInExports ? 'text-cyber-cyan animate-pulse' : 'text-terminal-medium'}`} />
-                    <div>
-                      <p className="font-mono font-bold matrix-text tracking-wider">EXPORT_PROTOCOL</p>
-                      <p className="text-sm text-matrix-600 font-mono">Include tax data in CSV transmission</p>
+                <div className="flex items-start sm:items-center justify-between flex-col sm:flex-row space-y-3 sm:space-y-0">
+                  <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
+                    <FileText className={`w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 ${taxSettings.includeInExports ? 'text-cyber-cyan animate-pulse' : 'text-terminal-medium'}`} />
+                    <div className="min-w-0">
+                      <p className="font-mono font-bold matrix-text tracking-wider text-sm sm:text-base">EXPORT_PROTOCOL</p>
+                      <p className="text-xs sm:text-sm text-matrix-600 font-mono">Include tax data in CSV transmission</p>
                     </div>
                   </div>
                   <button
                     onClick={handleExportToggle}
-                    className={`relative inline-flex h-8 w-16 items-center rounded-full border-2 transition-colors focus:outline-none ${
+                    className={`relative inline-flex h-6 w-12 sm:h-8 sm:w-16 items-center rounded-full border-2 transition-colors focus:outline-none flex-shrink-0 ${
                       taxSettings.includeInExports ? 'border-cyber-cyan bg-cyber-cyan/20' : 'border-terminal-medium bg-terminal-medium/20'
                     }`}
                   >
                     <span
-                      className={`inline-block h-6 w-6 transform rounded-full transition-transform ${
+                      className={`inline-block h-4 w-4 sm:h-6 sm:w-6 transform rounded-full transition-transform ${
                         taxSettings.includeInExports 
-                          ? 'translate-x-8 bg-cyber-cyan shadow-neon-cyan' 
+                          ? 'translate-x-6 sm:translate-x-8 bg-cyber-cyan shadow-neon-cyan' 
                           : 'translate-x-1 bg-terminal-medium'
                       }`}
                     />
@@ -308,10 +308,10 @@ const TaxSettingsComponent: React.FC<TaxSettingsComponentProps> = ({
               </div>
             </div>
             
-            <div className="terminal-window p-4 bg-terminal-black border-2 border-cyber-yellow">
-              <div className="flex items-start space-x-3">
-                <Info className="w-5 h-5 text-cyber-yellow mt-0.5 flex-shrink-0 animate-pulse" />
-                <div className="text-sm font-mono">
+            <div className="terminal-window p-3 sm:p-4 bg-terminal-black border-2 border-cyber-yellow">
+              <div className="flex items-start space-x-2 sm:space-x-3">
+                <Info className="w-4 h-4 sm:w-5 sm:h-5 text-cyber-yellow mt-0.5 flex-shrink-0 animate-pulse" />
+                <div className="text-xs sm:text-sm font-mono min-w-0">
                   <p className="font-bold neon-yellow mb-2 tracking-wider">
                     [WARNING] TAX_ESTIMATION_DISCLAIMER
                   </p>

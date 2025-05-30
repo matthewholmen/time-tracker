@@ -126,18 +126,16 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Detailed Time Blocks Export */}
           <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="p-3 border-2 border-matrix-500 rounded-lg bg-matrix-500/20">
-                <FileText size={24} className="text-matrix-500" />
-              </div>
+            <div className="text-center mb-6">
+              <FileText size={32} className="text-matrix-500 mx-auto mb-4" />
               <div>
-                <h4 className="text-lg font-cyber font-bold matrix-text tracking-wider">
+                <h4 className="text-sm sm:text-lg font-cyber font-bold matrix-text tracking-wider leading-tight mb-2">
                   DETAILED_SESSIONS.CSV
                 </h4>
-                <p className="text-sm text-matrix-600 font-mono">All time blocks with timestamps</p>
+                <p className="text-xs sm:text-sm text-matrix-600 font-mono">All time blocks with timestamps</p>
               </div>
             </div>
-            <p className="text-sm text-matrix-600 font-mono mb-6 leading-relaxed">
+            <p className="text-xs sm:text-sm text-matrix-600 font-mono mb-6 leading-relaxed">
               &gt; Exports comprehensive CSV with every time tracking session including 
               start/end times, duration, and earnings calculations.
             </p>
@@ -151,7 +149,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
               } transition-all duration-300`}
             >
               <Download size={18} className={isExporting ? '' : 'group-hover:animate-bounce'} />
-              <span className="font-mono tracking-wider">
+              <span className="font-mono tracking-wider text-xs sm:text-base">
                 {isExporting ? 'TRANSMITTING...' : 'EXPORT SESSIONS'}
               </span>
             </button>
@@ -159,18 +157,16 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
 
           {/* Project Summary Export */}
           <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="p-3 border-2 border-cyber-cyan rounded-lg bg-cyber-cyan/20">
-                <BarChart3 size={24} className="text-cyber-cyan" />
-              </div>
+            <div className="text-center mb-6">
+              <BarChart3 size={32} className="text-cyber-cyan mx-auto mb-4" />
               <div>
-                <h4 className="text-lg font-cyber font-bold neon-cyan tracking-wider">
+                <h4 className="text-sm sm:text-lg font-cyber font-bold neon-cyan tracking-wider leading-tight mb-2">
                   PROJECT_SUMMARY.CSV
                 </h4>
-                <p className="text-sm text-cyan-400 font-mono">Aggregated project statistics</p>
+                <p className="text-xs sm:text-sm text-cyan-400 font-mono">Aggregated project statistics</p>
               </div>
             </div>
-            <p className="text-sm text-matrix-600 font-mono mb-6 leading-relaxed">
+            <p className="text-xs sm:text-sm text-matrix-600 font-mono mb-6 leading-relaxed">
               &gt; Exports summary CSV with total time, earnings, and statistical 
               analysis for each project in the database.
             </p>
@@ -184,7 +180,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
               } transition-all duration-300`}
             >
               <Download size={18} className={isExporting ? '' : 'group-hover:animate-bounce'} />
-              <span className="font-mono tracking-wider">
+              <span className="font-mono tracking-wider text-xs sm:text-base">
                 {isExporting ? 'TRANSMITTING...' : 'EXPORT SUMMARY'}
               </span>
             </button>
@@ -196,14 +192,14 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
       <div className="mt-8 terminal-window p-6 bg-terminal-black border-2 border-matrix-800">
         <div className="flex items-center space-x-3 mb-6">
           <Cpu className="w-5 h-5 text-matrix-500 animate-pulse" />
-          <h4 className="text-lg font-cyber font-bold matrix-text tracking-wider">
-            FORMAT_SPECIFICATIONS
+          <h4 className="text-sm sm:text-lg font-cyber font-bold matrix-text tracking-wider">
+            FORMAT_SPECS
           </h4>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm font-mono">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-xs sm:text-sm font-mono">
           <div className="space-y-4">
-            <p className="font-bold matrix-text text-base tracking-wider mb-3">
+            <p className="font-bold matrix-text text-sm sm:text-base tracking-wider mb-3">
               DETAILED_SESSIONS.CSV:
             </p>
             <div className="space-y-3">
@@ -231,7 +227,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
           </div>
           
           <div className="space-y-4">
-            <p className="font-bold neon-cyan text-base tracking-wider mb-3">
+            <p className="font-bold neon-cyan text-sm sm:text-base tracking-wider mb-3">
               PROJECT_SUMMARY.CSV:
             </p>
             <div className="space-y-3">
@@ -261,16 +257,16 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
         
         {/* Status Bar */}
         <div className="mt-6 p-3 border-2 border-matrix-800 rounded bg-terminal-dark">
-          <div className="flex items-center justify-between text-xs font-mono text-matrix-600">
-            <div className="flex items-center space-x-4">
+          <div className="flex items-center justify-between text-xs font-mono text-matrix-600 flex-wrap gap-2">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <span>FORMAT:</span>
-              <span className="text-matrix-500">CSV_STANDARD</span>
+              <span className="text-matrix-500">CSV</span>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <span>ENCODING:</span>
               <span className="text-matrix-500">UTF-8</span>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
               <span>STATUS:</span>
               <span className="text-matrix-500 animate-pulse">READY</span>
             </div>

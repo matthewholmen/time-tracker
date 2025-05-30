@@ -229,16 +229,16 @@ const EnhancedTimer: React.FC<EnhancedTimerProps> = ({
           <button
             onClick={handleToggle}
             disabled={!currentProject}
-            className={`group relative px-16 py-3 rounded-full text-lg font-mono font-bold tracking-wider transition-all duration-500 transform hover:scale-105 flex items-center space-x-3 ${
+            className={`group relative px-12 sm:px-16 py-2 sm:py-3 rounded-lg text-xs sm:text-lg font-mono font-bold tracking-wider transition-all duration-500 transform hover:scale-105 flex items-center justify-center space-x-1.5 sm:space-x-3 w-full max-w-xs sm:max-w-sm ${
               !currentProject 
                 ? 'border-2 border-terminal-medium text-terminal-medium cursor-not-allowed opacity-50 bg-black/20'
                 : isRunning 
-                  ? 'border-2 border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black animate-neon-pulse bg-black/40' 
-                  : 'border-2 border-matrix-500 text-matrix-500 hover:bg-matrix-500 hover:text-black bg-black/40'
+                  ? 'border-2 border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black bg-black/40' 
+                  : 'bg-matrix-500 border-2 border-matrix-500 text-black hover:bg-matrix-600 hover:border-matrix-600'
             }`}
           >
             <div className="relative z-10 transition-transform duration-300 group-hover:scale-110">
-              {isRunning ? <Pause size={20} /> : <Play size={20} className="ml-1" />}
+              {isRunning ? <Pause size={14} className="sm:w-5 sm:h-5" strokeWidth={2} /> : <Play size={14} className="ml-1 sm:w-5 sm:h-5" strokeWidth={2} />}
             </div>
             <span className="relative z-10">
               {isRunning ? 'PAUSE' : 'START'}

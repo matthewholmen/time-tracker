@@ -209,7 +209,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
         </div>
         <button
           onClick={() => setIsCreating(true)}
-          className="cyber-button flex items-center justify-center space-x-3 px-6 py-3 w-full sm:w-auto"
+          className="bg-matrix-500 border-2 border-matrix-500 text-black hover:bg-matrix-600 hover:border-matrix-600 font-mono font-bold tracking-wider transition-all duration-300 flex items-center justify-center space-x-3 px-6 py-3 w-full sm:w-auto rounded"
         >
           <Plus size={18} />
           <span>NEW PROJECT</span>
