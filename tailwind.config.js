@@ -6,10 +6,17 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'sans': ['Share Tech Mono', 'Courier New', 'monospace'],
-        'mono': ['Orbitron', 'Share Tech Mono', 'Consolas', 'monospace'],
-        'cyber': ['Orbitron', 'monospace'],
-        'digital': ['Iceland', 'Orbitron', 'monospace'],
+        'sans': ['Share Tech Mono', 'JetBrains Mono', 'Courier New', 'monospace'],
+        'mono': ['JetBrains Mono', 'Fira Code', 'Share Tech Mono', 'Courier New', 'Consolas', 'monospace'],
+        'cyber': ['Orbitron', 'JetBrains Mono', 'monospace'], // Keep Orbitron for headings, fallback to monospace
+        'digital': ['Electrolize', 'Audiowide', 'JetBrains Mono', 'monospace'], // DIGITAL CLOCK fonts
+        'timer': ['Electrolize', 'Courier New', 'monospace'], // Dedicated timer font - LCD style
+        'amount': ['Electrolize', 'Audiowide', 'monospace'], // For money amounts
+        'terminal': ['Share Tech Mono', 'JetBrains Mono', 'monospace'], // Terminal text
+        'code': ['Fira Code', 'JetBrains Mono', 'monospace'], // Code-style elements
+        'lcd': ['Electrolize', 'monospace'], // LCD/Digital display style
+        'led': ['Audiowide', 'monospace'], // LED display style
+        'segment': ['Rationale', 'Courier New', 'monospace'], // 7-segment style
       },
       colors: {
         // Matrix/Y2K Color Palette - TONED DOWN
@@ -68,6 +75,7 @@ module.exports = {
         'terminal': '0 0 15px rgba(34, 197, 94, 0.25), inset 0 0 15px rgba(34, 197, 94, 0.05)',
         'cyber': '0 0 8px rgba(34, 197, 94, 0.2), 0 0 16px rgba(34, 197, 94, 0.1)',
         'digital': 'inset 0 0 10px rgba(34, 197, 94, 0.1), 0 0 10px rgba(34, 197, 94, 0.15)',
+        'lcd-glow': '0 0 5px rgba(34, 197, 94, 0.4), 0 0 10px rgba(34, 197, 94, 0.3), 0 0 15px rgba(34, 197, 94, 0.2)',
       },
       blur: {
         xs: '2px',
@@ -78,6 +86,7 @@ module.exports = {
         'neon-pulse': 'neon-pulse 2s ease-in-out infinite',
         'fade-in': 'fadeIn 0.3s ease-in-out',
         'scale-in': 'scaleIn 0.2s ease-out',
+        'digital-flicker': 'digitalFlicker 4s ease-in-out infinite',
       },
       keyframes: {
         'matrix-glow': {
@@ -94,6 +103,14 @@ module.exports = {
           },
           '50%': { 
             boxShadow: '0 0 5px #4ade80, 0 0 10px #4ade80, inset 0 0 5px #4ade80',
+          },
+        },
+        'digitalFlicker': {
+          '0%, 100%': { 
+            textShadow: '0 0 5px #22c55e, 0 0 10px #22c55e, 0 0 15px #22c55e',
+          },
+          '50%': { 
+            textShadow: '0 0 8px #4ade80, 0 0 15px #4ade80, 0 0 20px #4ade80',
           },
         },
         fadeIn: {

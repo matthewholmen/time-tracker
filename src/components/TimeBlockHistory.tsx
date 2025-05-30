@@ -96,7 +96,7 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
   }
 
   return (
-    <div className="terminal-window shadow-neon-green p-6 mb-12 animate-fade-in">
+    <div className="mb-12 animate-fade-in">
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center space-x-3">
           <Activity className="w-6 h-6 neon-yellow animate-pulse" />
@@ -106,16 +106,19 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
         </div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className={`cyber-button flex items-center space-x-3 px-6 py-3 border-cyber-yellow text-cyber-yellow hover:bg-cyber-yellow hover:text-black transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+          className="text-cyber-yellow hover:text-yellow-400 transition-colors p-2 rounded-lg border border-cyber-yellow/30 hover:border-cyber-yellow/60"
+          title={isExpanded ? 'Collapse archive' : 'Expand archive'}
         >
-          {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-          <span>{isExpanded ? 'COLLAPSE' : 'EXPAND'}</span>
+          <div className="flex items-center space-x-2 text-sm font-mono">
+            {isExpanded ? <ChevronUp size={18} className="animate-pulse" /> : <ChevronDown size={18} />}
+            <span className="hidden sm:inline font-bold tracking-wider">{isExpanded ? 'COLLAPSE' : 'EXPAND'}</span>
+          </div>
         </button>
       </div>
 
       {/* Summary Stats Grid */}
       <div className={`grid grid-cols-1 ${taxSettings.includeInDisplays && totalEarnings > 0 ? 'md:grid-cols-2 lg:grid-cols-5' : 'md:grid-cols-3'} gap-4 mb-8`}>
-        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300 transform hover:scale-105">
+        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300">
           <div className="flex items-center space-x-3 mb-3">
             <Calendar className="w-5 h-5 text-matrix-500 animate-pulse" />
             <span className="font-mono font-bold text-matrix-600 tracking-wider text-sm">SESSIONS</span>
@@ -124,7 +127,7 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
           <p className="text-xs text-matrix-700 font-mono mt-1">TOTAL_COUNT</p>
         </div>
         
-        <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300 transform hover:scale-105">
+        <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300">
           <div className="flex items-center space-x-3 mb-3">
             <Clock className="w-5 h-5 text-cyber-cyan animate-pulse" />
             <span className="font-mono font-bold text-cyan-400 tracking-wider text-sm">TIME_LOG</span>
@@ -133,7 +136,7 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
           <p className="text-xs text-cyan-300 font-mono mt-1">ACCUMULATED</p>
         </div>
         
-        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300 transform hover:scale-105">
+        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300">
           <div className="flex items-center space-x-3 mb-3">
             <DollarSign className="w-5 h-5 text-matrix-500 animate-pulse" />
             <span className="font-mono font-bold text-matrix-600 tracking-wider text-sm">EARNINGS</span>
@@ -144,7 +147,7 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
         
         {taxSettings.includeInDisplays && totalEarnings > 0 && (
           <>
-            <div className="cyber-card p-6 hover:border-cyber-red transition-all duration-300 transform hover:scale-105">
+            <div className="cyber-card p-6 hover:border-cyber-red transition-all duration-300">
               <div className="flex items-center space-x-3 mb-3">
                 <Calculator className="w-5 h-5 text-cyber-red animate-pulse" />
                 <span className="font-mono font-bold text-red-400 tracking-wider text-sm">TAX_EST</span>
@@ -153,7 +156,7 @@ const TimeBlockHistory: React.FC<TimeBlockHistoryProps> = ({ projects, currentPr
               <p className="text-xs text-red-300 font-mono mt-1">DEDUCTION</p>
             </div>
             
-            <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300 transform hover:scale-105">
+            <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300">
               <div className="flex items-center space-x-3 mb-3">
                 <Zap className="w-5 h-5 text-cyber-cyan animate-pulse" />
                 <span className="font-mono font-bold text-cyan-400 tracking-wider text-sm">NET_TOTAL</span>

@@ -4,6 +4,7 @@ import EnhancedTimer from './components/EnhancedTimer';
 import TimeBlockHistory from './components/TimeBlockHistory';
 import ExportManager from './components/ExportManager';
 import TaxSettings from './components/TaxSettings';
+import MoneyRain from './components/MoneyRain';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { Project, TaxSettings as TaxSettingsType } from './types';
 import { createProject, createTimeBlock, updateProjectWithTimeBlock } from './utils/projectUtils';
@@ -94,56 +95,36 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black matrix-bg relative overflow-hidden crt-effect">
-      {/* Matrix Rain Background Effect */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        {/* Matrix Grid Overlay */}
-        <div className="absolute inset-0 matrix-grid opacity-20"></div>
-        
-        {/* Floating Matrix Code Streams */}
-        <div className="absolute top-0 left-[10%] w-px h-full bg-gradient-to-b from-transparent via-matrix-500 to-transparent animate-matrix-rain opacity-60" style={{animationDelay: '0s'}}></div>
-        <div className="absolute top-0 left-[25%] w-px h-full bg-gradient-to-b from-transparent via-cyber-cyan to-transparent animate-matrix-rain opacity-40" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-0 left-[40%] w-px h-full bg-gradient-to-b from-transparent via-matrix-500 to-transparent animate-matrix-rain opacity-50" style={{animationDelay: '2s'}}></div>
-        <div className="absolute top-0 left-[55%] w-px h-full bg-gradient-to-b from-transparent via-cyber-purple to-transparent animate-matrix-rain opacity-30" style={{animationDelay: '0.5s'}}></div>
-        <div className="absolute top-0 left-[70%] w-px h-full bg-gradient-to-b from-transparent via-matrix-500 to-transparent animate-matrix-rain opacity-70" style={{animationDelay: '1.5s'}}></div>
-        <div className="absolute top-0 left-[85%] w-px h-full bg-gradient-to-b from-transparent via-cyber-cyan to-transparent animate-matrix-rain opacity-35" style={{animationDelay: '2.5s'}}></div>
-        
-        {/* Cyber Circuit Patterns */}
-        <div className="absolute top-20 right-20 w-32 h-32 border-2 border-matrix-500 border-dashed opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-40 left-16 w-24 h-24 border-2 border-cyber-cyan border-dashed opacity-20 animate-pulse" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-1/2 right-1/4 w-16 h-16 border-2 border-cyber-purple border-dashed opacity-25 animate-pulse" style={{animationDelay: '2s'}}></div>
-        
-        {/* Glowing Orbs */}
-        <div className="absolute top-32 left-1/4 w-4 h-4 bg-matrix-500 rounded-full shadow-neon-green animate-matrix-glow opacity-80"></div>
-        <div className="absolute bottom-1/3 right-1/3 w-3 h-3 bg-cyber-cyan rounded-full shadow-neon-cyan animate-matrix-glow opacity-60" style={{animationDelay: '1s'}}></div>
-        <div className="absolute top-2/3 left-3/4 w-2 h-2 bg-cyber-purple rounded-full shadow-neon-purple animate-matrix-glow opacity-70" style={{animationDelay: '0.5s'}}></div>
-        
-        {/* Scanlines Effect */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-matrix-500/5 to-transparent animate-scan-line"></div>
-      </div>
+    <div className="min-h-screen bg-black relative overflow-hidden crt-effect">
+      {/* Money Rain Background Effect - Only active when timer is running */}
+      <MoneyRain isActive={isTimerRunning} />
       
-      <div className="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
+      {/* Subtle Matrix Grid Overlay */}
+      <div className="fixed inset-0 matrix-grid opacity-10 pointer-events-none z-1"></div>
+      
+      <div className="relative z-10">
+        <div className="container mx-auto px-4 max-w-6xl pt-8">
         
+        {/* Main Timer Interface */}
+        <section className="cyber-card animate-scale-in mb-8" style={{animationDelay: '0s'}}>
+          <div className="border-l-4 border-matrix-500 pl-4 mb-6">
+            <h1 className="text-xl font-cyber font-bold matrix-text tracking-wide">
+              &gt; TIMER_MODULE.EXE
+            </h1>
+            <p className="text-sm text-matrix-600 font-mono mt-1">
+              Neural time tracking interface
+            </p>
+          </div>
+          <EnhancedTimer
+            currentProject={currentProject}
+            projects={projects}
+            taxSettings={taxSettings}
+            onSessionComplete={handleSessionComplete}
+            onTimerStateChange={setIsTimerRunning}
+          />
+        </section>
         {/* Main Interface Grid */}
         <div className="space-y-8">
-          {/* Timer Section */}
-          <section className="cyber-card animate-scale-in">
-            <div className="border-l-4 border-matrix-500 pl-4 mb-6">
-              <h2 className="text-xl font-cyber font-bold matrix-text tracking-wide">
-                &gt; TIMER_MODULE.EXE
-              </h2>
-              <p className="text-sm text-matrix-600 font-mono mt-1">
-                Neural time tracking interface
-              </p>
-            </div>
-            <EnhancedTimer
-              currentProject={currentProject}
-              projects={projects}
-              taxSettings={taxSettings}
-              onSessionComplete={handleSessionComplete}
-              onTimerStateChange={setIsTimerRunning}
-            />
-          </section>
           
           {/* Project Manager Section */}
           <section className="cyber-card animate-scale-in" style={{animationDelay: '0.1s'}}>
@@ -236,6 +217,7 @@ function App() {
             </div>
           </div>
         </footer>
+        </div>
       </div>
       
       {/* Matrix Code Rain Effect */}

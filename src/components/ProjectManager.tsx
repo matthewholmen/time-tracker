@@ -199,7 +199,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
   };
 
   return (
-    <div className="terminal-window shadow-neon-green p-6 mb-12 animate-fade-in">
+    <div className="mb-12 animate-fade-in">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 space-y-4 sm:space-y-0">
         <div className="flex items-center space-x-3">
           <Database className="w-6 h-6 matrix-text animate-pulse" />
@@ -352,7 +352,7 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
               ) : (
                 <>
                   <div 
-                    className={`p-6 ${isTimerRunning && currentProject?.id !== project.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+                    className={`${isTimerRunning && currentProject?.id !== project.id ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
                     onClick={() => {
                       if (isTimerRunning && currentProject?.id !== project.id) {
                         setNotification({
@@ -366,23 +366,28 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                       onProjectSelect(project);
                     }}
                   >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-4">
-                          <h3 className={`text-xl font-cyber font-black truncate tracking-wider ${
-                            currentProject?.id === project.id ? 'matrix-text glitch-text' : 'text-matrix-600'
-                          }`}>
-                            {project.name.toUpperCase()}
-                          </h3>
-                          {currentProject?.id === project.id && (
-                            <span className="px-3 py-1 bg-matrix-500 text-black text-xs font-mono font-bold rounded border border-matrix-500 whitespace-nowrap animate-pulse">
+                    {/* Mobile Layout */}
+                    <div className="block sm:hidden">
+                      {/* Header with status and project name */}
+                      <div className="p-3">
+                        {/* Active status at top if applicable */}
+                        {currentProject?.id === project.id && (
+                          <div className="mb-2">
+                            <span className="px-2 py-1 bg-matrix-500 text-black text-xs font-mono font-bold rounded border border-matrix-500 animate-pulse">
                               ACTIVE
                             </span>
-                          )}
-                        </div>
+                          </div>
+                        )}
                         
-                        {/* Project Stats - Cyber Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm font-mono">
+                        {/* Project name */}
+                        <h3 className={`text-lg font-cyber font-black tracking-wider mb-3 ${
+                          currentProject?.id === project.id ? 'matrix-text glitch-text' : 'text-matrix-600'
+                        }`}>
+                          {project.name.toUpperCase()}
+                        </h3>
+                        
+                        {/* Key stats in a clean row */}
+                        <div className="flex items-center justify-between text-sm font-mono">
                           <div className="flex items-center space-x-2">
                             <Zap className="w-4 h-4 text-cyber-yellow animate-pulse" />
                             <span className={currentProject?.id === project.id ? 'neon-cyan' : 'text-matrix-600'}>
@@ -390,109 +395,187 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
                             </span>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-matrix-500 rounded-full animate-pulse"></div>
-                            <span className={currentProject?.id === project.id ? 'matrix-text' : 'text-matrix-600'}>
-                              <span className="font-bold">{formatTimeSummary(project.totalTime)}</span> LOGGED
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
                             <div className="w-2 h-2 bg-cyber-cyan rounded-full animate-pulse"></div>
                             <span className={currentProject?.id === project.id ? 'neon-cyan' : 'text-matrix-600'}>
-                              <span className="font-bold">${project.totalEarnings.toFixed(2)}</span> EARNED
+                              <span className="font-bold">${project.totalEarnings.toFixed(2)}</span>
                             </span>
                           </div>
-                          {taxSettings?.includeInDisplays && project.totalEarnings > 0 && (
-                            <div className="flex items-center space-x-2">
-                              <Shield className="w-4 h-4 text-cyber-purple animate-pulse" />
-                              <span className={currentProject?.id === project.id ? 'neon-purple' : 'text-matrix-600'}>
-                                <span className="font-bold">${calculateTax(project.totalEarnings, taxSettings.taxRate).netEarnings.toFixed(2)}</span> NET
-                              </span>
-                            </div>
-                          )}
                         </div>
                       </div>
                       
-                      {/* Cyber Actions */}
-                      <div className="flex items-center ml-4">
-                        {/* Desktop: Individual buttons */}
-                        <div className="hidden sm:flex items-center space-x-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setExpandedProject(expandedProject === project.id ? null : project.id);
-                            }}
-                            className="cyber-button p-2 border-matrix-600 text-matrix-600 hover:bg-matrix-600 hover:text-black"
-                          >
-                            {expandedProject === project.id ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                          </button>
+                      {/* Bottom section with secondary stats and actions */}
+                      <div className="px-3 pb-3">
+                        <div className="flex items-start justify-between">
+                          {/* Secondary stats - more breathing room */}
+                          <div className="flex flex-col space-y-1.5 text-xs font-mono text-matrix-600 min-w-0 flex-1">
+                            <div className="flex items-center space-x-2">
+                              <div className="w-1.5 h-1.5 bg-matrix-500 rounded-full animate-pulse"></div>
+                              <span>{formatTimeSummary(project.totalTime)} logged</span>
+                            </div>
+                            {taxSettings?.includeInDisplays && project.totalEarnings > 0 && (
+                              <div className="flex items-center space-x-2">
+                                <div className="w-1.5 h-1.5 bg-cyber-purple rounded-full animate-pulse"></div>
+                                <span>${calculateTax(project.totalEarnings, taxSettings.taxRate).netEarnings.toFixed(2)} net</span>
+                              </div>
+                            )}
+                          </div>
+                          
+                          {/* Cyber-style action buttons */}
+                          <div className="flex items-center space-x-4 ml-4">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setExpandedProject(expandedProject === project.id ? null : project.id);
+                              }}
+                              className="text-matrix-500 hover:text-matrix-400 transition-colors p-1"
+                              title={expandedProject === project.id ? 'Hide sessions' : 'Show sessions'}
+                            >
+                              {expandedProject === project.id ? (
+                                <div className="flex items-center space-x-1 text-xs font-mono">
+                                  <ChevronUp size={14} />
+                                  <span className="hidden sm:inline">HIDE</span>
+                                </div>
+                              ) : (
+                                <div className="flex items-center space-x-1 text-xs font-mono">
+                                  <ChevronDown size={14} />
+                                  <span className="hidden sm:inline">SESSIONS</span>
+                                </div>
+                              )}
+                            </button>
+                            
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowProjectActions(showProjectActions === project.id ? null : project.id);
+                              }}
+                              className="text-matrix-500 hover:text-matrix-400 transition-colors p-1"
+                              title="Project actions"
+                            >
+                              <div className="flex items-center space-x-1 text-xs font-mono">
+                                <MoreVertical size={14} />
+                                <span className="hidden sm:inline">OPTS</span>
+                              </div>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Mobile Dropdown Menu */}
+                      {showProjectActions === project.id && (
+                        <div className="border-t border-matrix-800 bg-terminal-black">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleEditStart(project);
+                              setShowProjectActions(null);
                             }}
-                            className="cyber-button p-2 border-cyber-cyan text-cyber-cyan hover:bg-cyber-cyan hover:text-black"
+                            className="w-full px-3 py-2 text-left neon-cyan hover:bg-cyan-500/20 transition-colors flex items-center space-x-3 font-mono text-sm border-b border-matrix-800"
                           >
-                            <Edit2 size={18} />
+                            <Edit2 size={14} />
+                            <span>EDIT PROJECT</span>
                           </button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDeleteProject(project.id, project.name);
                             }}
-                            className="cyber-button p-2 border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black"
+                            className="w-full px-3 py-2 text-left text-cyber-red hover:bg-red-500/20 transition-colors flex items-center space-x-3 font-mono text-sm"
                           >
-                            <Trash2 size={18} />
+                            <Trash2 size={14} />
+                            <span>DELETE PROJECT</span>
                           </button>
                         </div>
+                      )}
+                    </div>
+                    
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:block p-6">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mb-4">
+                            <h3 className={`text-xl font-cyber font-black truncate tracking-wider ${
+                              currentProject?.id === project.id ? 'matrix-text glitch-text' : 'text-matrix-600'
+                            }`}>
+                              {project.name.toUpperCase()}
+                            </h3>
+                            {currentProject?.id === project.id && (
+                              <span className="px-3 py-1 bg-matrix-500 text-black text-xs font-mono font-bold rounded border border-matrix-500 whitespace-nowrap animate-pulse">
+                                ACTIVE
+                              </span>
+                            )}
+                          </div>
+                          
+                          {/* Project Stats - Cyber Grid */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm font-mono">
+                            <div className="flex items-center space-x-2">
+                              <Zap className="w-4 h-4 text-cyber-yellow animate-pulse" />
+                              <span className={currentProject?.id === project.id ? 'neon-cyan' : 'text-matrix-600'}>
+                                <span className="font-bold">${project.rate}</span>/HR
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <div className="w-2 h-2 bg-matrix-500 rounded-full animate-pulse"></div>
+                              <span className={currentProject?.id === project.id ? 'matrix-text' : 'text-matrix-600'}>
+                                <span className="font-bold">{formatTimeSummary(project.totalTime)}</span> LOGGED
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <div className="w-2 h-2 bg-cyber-cyan rounded-full animate-pulse"></div>
+                              <span className={currentProject?.id === project.id ? 'neon-cyan' : 'text-matrix-600'}>
+                                <span className="font-bold">${project.totalEarnings.toFixed(2)}</span> EARNED
+                              </span>
+                            </div>
+                            {taxSettings?.includeInDisplays && project.totalEarnings > 0 && (
+                              <div className="flex items-center space-x-2">
+                                <Shield className="w-4 h-4 text-cyber-purple animate-pulse" />
+                                <span className={currentProject?.id === project.id ? 'neon-purple' : 'text-matrix-600'}>
+                                  <span className="font-bold">${calculateTax(project.totalEarnings, taxSettings.taxRate).netEarnings.toFixed(2)}</span> NET
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
                         
-                        {/* Mobile: Dropdown menu */}
-                        <div className="relative sm:hidden">
+                        {/* Desktop Actions - Match mobile styling */}
+                        <div className="flex items-center ml-4 space-x-4">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              setShowProjectActions(showProjectActions === project.id ? null : project.id);
+                              setExpandedProject(expandedProject === project.id ? null : project.id);
                             }}
-                            className="cyber-button p-2 border-matrix-600 text-matrix-600 hover:bg-matrix-600 hover:text-black"
+                            className="text-matrix-500 hover:text-matrix-400 transition-colors p-1"
+                            title={expandedProject === project.id ? 'Hide sessions' : 'Show sessions'}
                           >
-                            <MoreVertical size={18} />
+                            <div className="flex items-center space-x-1 text-xs font-mono">
+                              {expandedProject === project.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                            </div>
                           </button>
                           
-                          {/* Dropdown Menu */}
-                          {showProjectActions === project.id && (
-                            <div className="absolute right-0 top-full mt-2 w-56 terminal-window py-2 z-10 border-2 border-matrix-500">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setExpandedProject(expandedProject === project.id ? null : project.id);
-                                  setShowProjectActions(null);
-                                }}
-                                className="w-full px-4 py-3 text-left matrix-text hover:bg-matrix-500/20 transition-colors flex items-center space-x-3 font-mono"
-                              >
-                                {expandedProject === project.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                                <span>{expandedProject === project.id ? 'HIDE SESSIONS' : 'SHOW SESSIONS'}</span>
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleEditStart(project);
-                                }}
-                                className="w-full px-4 py-3 text-left neon-cyan hover:bg-cyan-500/20 transition-colors flex items-center space-x-3 font-mono"
-                              >
-                                <Edit2 size={16} />
-                                <span>EDIT PROJECT</span>
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteProject(project.id, project.name);
-                                }}
-                                className="w-full px-4 py-3 text-left text-cyber-red hover:bg-red-500/20 transition-colors flex items-center space-x-3 font-mono"
-                              >
-                                <Trash2 size={16} />
-                                <span>DELETE PROJECT</span>
-                              </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditStart(project);
+                            }}
+                            className="text-cyber-cyan hover:text-cyan-400 transition-colors p-1"
+                            title="Edit project"
+                          >
+                            <div className="flex items-center space-x-1 text-xs font-mono">
+                              <Edit2 size={16} />
                             </div>
-                          )}
+                          </button>
+                          
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteProject(project.id, project.name);
+                            }}
+                            className="text-cyber-red hover:text-red-400 transition-colors p-1"
+                            title="Delete project"
+                          >
+                            <div className="flex items-center space-x-1 text-xs font-mono">
+                              <Trash2 size={16} />
+                            </div>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -500,59 +583,62 @@ const ProjectManager: React.FC<ProjectManagerProps> = ({
 
                   {/* Expanded Project Details */}
                   {expandedProject === project.id && (
-                    <div className="px-6 pb-6 border-t-2 border-matrix-800">
-                      <div className="mt-6">
+                    <div className="border-t border-matrix-800 bg-terminal-black/50">
+                      <div className="p-4">
                         {project.timeBlocks.length === 0 ? (
-                          <div className="text-center py-12">
-                            <div className="w-16 h-16 mx-auto mb-4 border-2 border-dashed border-matrix-600 rounded-lg flex items-center justify-center">
-                              <div className="w-8 h-8 border-2 border-matrix-600 rounded-full animate-pulse"></div>
+                          <div className="text-center py-8">
+                            <div className="w-12 h-12 mx-auto mb-3 border border-dashed border-matrix-600 rounded-lg flex items-center justify-center">
+                              <div className="w-6 h-6 border border-matrix-600 rounded-full animate-pulse"></div>
                             </div>
-                            <p className="matrix-text font-mono font-bold mb-2">
+                            <p className="matrix-text font-mono font-bold mb-1 text-sm">
                               &gt; NO SESSIONS RECORDED
                             </p>
-                            <p className="text-matrix-600 text-sm font-mono">
+                            <p className="text-matrix-600 text-xs font-mono">
                               Initialize timer to log session data
                             </p>
                           </div>
                         ) : (
-                          <div className="space-y-4">
-                            <div className="flex items-center space-x-3 mb-6">
-                              <div className="w-3 h-3 bg-matrix-500 rounded-full animate-pulse"></div>
-                              <h4 className="font-cyber font-bold matrix-text tracking-wider">
+                          <div className="space-y-0">
+                            <div className="flex items-center space-x-2 mb-4">
+                              <div className="w-2 h-2 bg-matrix-500 rounded-full animate-pulse"></div>
+                              <h4 className="font-cyber font-bold matrix-text tracking-wider text-sm">
                                 SESSION LOG ({project.timeBlocks.length})
                               </h4>
                             </div>
-                            <div className="space-y-3">
+                            <div>
                               {project.timeBlocks
                                 .sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime())
-                                .map((block) => (
-                                <div key={block.id} className="terminal-window p-4 hover:border-matrix-500 transition-all duration-300 group">
-                                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-3 sm:space-y-0">
-                                    <div className="flex-1 min-w-0">
-                                      <p className="matrix-text font-mono font-bold text-sm mb-1">
-                                        {formatDateTime(new Date(block.startTime))} → {formatDateTime(new Date(block.endTime))}
-                                      </p>
-                                      <p className="text-matrix-600 font-mono text-xs">
-                                        DATE: {new Date(block.startTime).toLocaleDateString()}
-                                      </p>
-                                    </div>
-                                    <div className="flex items-center justify-between sm:justify-end space-x-4">
-                                      <div className="text-right">
-                                        <p className="font-mono font-bold matrix-text text-sm">{formatTime(block.duration)}</p>
-                                        <p className="neon-cyan font-mono font-bold text-xs">${block.earnings.toFixed(2)}</p>
+                                .map((block, index) => (
+                                <div key={block.id}>
+                                  <div className="py-3 hover:bg-matrix-900/30 transition-all duration-300 group">
+                                    <div className="flex items-start justify-between">
+                                      <div className="flex-1 min-w-0 pr-3">
+                                        <p className="matrix-text font-mono font-bold text-xs mb-1 leading-relaxed">
+                                          {formatDateTime(new Date(block.startTime))} → {formatDateTime(new Date(block.endTime))}
+                                        </p>
+                                        <p className="text-matrix-600 font-mono text-xs">
+                                          {new Date(block.startTime).toLocaleDateString()}
+                                        </p>
+                                        <div className="flex items-center space-x-3 mt-2">
+                                          <span className="font-mono font-bold matrix-text text-xs">{formatTime(block.duration)}</span>
+                                          <span className="neon-cyan font-mono font-bold text-xs">${block.earnings.toFixed(2)}</span>
+                                        </div>
                                       </div>
                                       <button
                                         onClick={(e) => {
                                           e.stopPropagation();
                                           handleTimeBlockDelete(project.id, block.id);
                                         }}
-                                        className="opacity-70 sm:opacity-0 group-hover:opacity-100 cyber-button p-2 border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black"
+                                        className="opacity-60 hover:opacity-100 text-cyber-red hover:text-red-400 transition-all p-1"
                                         title="Delete session"
                                       >
-                                        <Trash2 size={14} />
+                                        <Trash2 size={12} />
                                       </button>
                                     </div>
                                   </div>
+                                  {index < project.timeBlocks.length - 1 && (
+                                    <div className="border-b border-matrix-800/50"></div>
+                                  )}
                                 </div>
                               ))}
                             </div>

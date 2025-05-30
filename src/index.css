@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono:wght@400&family=Iceland:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono:wght@400&family=Iceland:wght@400&family=JetBrains+Mono:wght@400;700;800&family=Fira+Code:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+/* Digital Clock Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Electrolize:wght@400&family=Seven+Segment:wght@400&display=swap');
+
+/* Additional digital/LED style fonts from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Audiowide:wght@400&family=Rationale:wght@400&family=Segment7:wght@400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -18,6 +24,15 @@
   --gray-dark: #1e293b;
   --gray-medium: #334155;
   --white-glow: rgba(255, 255, 255, 0.9);
+}
+
+/* CSS-Only 7-Segment Digital Font */
+@font-face {
+  font-family: 'Digital7';
+  src: url('data:font/woff2;base64,') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 /* Base Styles - Terminal Dark Theme */
@@ -60,10 +75,35 @@ body {
   }
 }
 
+/* CSS-Only 7-Segment Display Simulation */
+.seven-segment-display {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 4rem;
+  letter-spacing: 0.2em;
+  color: var(--matrix-green);
+  background: var(--black-void);
+  text-shadow: 
+    0 0 5px var(--matrix-green),
+    0 0 10px var(--matrix-green),
+    0 0 15px var(--matrix-green);
+  /* Simulate LED segments with CSS filters */
+  filter: 
+    drop-shadow(0 0 3px var(--matrix-green))
+    drop-shadow(0 0 6px var(--matrix-green));
+  /* Ensure fixed width for all characters */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  text-align: center;
+  line-height: 1;
+}
+
 /* Matrix Terminal utility classes - TONED DOWN */
 @layer utilities {
   .terminal-window {
-    background: var(--black-void);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
     border: 1px solid var(--matrix-green);
     border-radius: 8px;
     box-shadow: 
@@ -77,7 +117,7 @@ body {
     background: linear-gradient(45deg, var(--gray-dark), var(--gray-medium));
     border: 1px solid var(--matrix-green);
     color: var(--matrix-green);
-    font-family: 'Orbitron', monospace;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Share Tech Mono', monospace;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -115,21 +155,118 @@ body {
     text-shadow: 0 0 5px var(--yellow-cyber);
   }
   
+  /* DIGITAL CLOCK DISPLAY OPTIONS */
   .digital-display {
-    font-family: 'Orbitron', monospace;
-    font-weight: 900;
+    font-family: 'Electrolize', 'Audiowide', 'JetBrains Mono', 'Courier New', monospace;
+    font-weight: 400;
     font-size: 3rem;
     color: var(--matrix-green);
     text-shadow: 
       0 0 3px var(--matrix-green),
-      0 0 6px var(--matrix-green);
-    background: var(--black-void);
+      0 0 6px var(--matrix-green),
+      0 0 9px var(--matrix-green);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(6px) saturate(140%);
+    -webkit-backdrop-filter: blur(6px) saturate(140%);
     border: 2px solid var(--matrix-green);
     padding: 20px;
     border-radius: 12px;
-    letter-spacing: 3px;
+    letter-spacing: 0.15em;
     position: relative;
     overflow: hidden;
+    /* CRITICAL: Ensure consistent width for all digits */
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    text-align: center;
+    line-height: 1;
+  }
+  
+  /* Digital Clock Font Variations */
+  .digital-clock-electrolize {
+    font-family: 'Electrolize', monospace;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+  }
+  
+  .digital-clock-audiowide {
+    font-family: 'Audiowide', monospace;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+  }
+  
+  .digital-clock-rationale {
+    font-family: 'Rationale', monospace;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+  }
+  
+  /* CSS-Based 7-Segment Style - CLEAN VERSION */
+  .digital-clock-segments {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-weight: 800;
+    font-size: 6rem;
+    letter-spacing: 0.15em;
+    color: var(--matrix-green);
+    text-shadow: 
+      0 0 5px var(--matrix-green),
+      0 0 10px var(--matrix-green);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    text-align: center;
+    line-height: 1;
+    /* Remove blur effects that cause issues */
+    filter: none;
+    /* Ensure consistent spacing */
+    font-family: 'JetBrains Mono', monospace;
+  }
+  
+  /* Responsive sizing for digital clock */
+  @media (max-width: 640px) {
+    .digital-clock-segments {
+      font-size: 3rem;
+      letter-spacing: 0.1em;
+    }
+  }
+  
+  @media (min-width: 641px) and (max-width: 768px) {
+    .digital-clock-segments {
+      font-size: 4rem;
+    }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .digital-clock-segments {
+      font-size: 5rem;
+    }
+  }
+  
+  @media (min-width: 1025px) {
+    .digital-clock-segments {
+      font-size: 6rem;
+    }
+  }
+  
+  /* Enhanced glow effect for digital clock */
+  .digital-clock-glow {
+    position: relative;
+  }
+  
+  .digital-clock-glow::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--matrix-green);
+    text-shadow: 
+      0 0 5px var(--matrix-green),
+      0 0 10px var(--matrix-green),
+      0 0 15px var(--matrix-green),
+      0 0 20px var(--matrix-green),
+      0 0 25px var(--matrix-green);
+    filter: blur(1px);
+    z-index: -1;
   }
   
   .digital-display::after {
@@ -150,7 +287,9 @@ body {
   }
   
   .cyber-card {
-    background: var(--black-void);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px) saturate(140%);
+    -webkit-backdrop-filter: blur(6px) saturate(140%);
     border: 1px solid var(--matrix-green);
     border-radius: 12px;
     padding: 24px;
@@ -160,7 +299,6 @@ body {
   }
   
   .cyber-card:hover {
-    transform: translateY(-1px);
     border-color: var(--matrix-green-bright);
     box-shadow: 
       0 0 10px rgba(34, 197, 94, 0.3),
@@ -176,13 +314,18 @@ body {
   }
   
   .cyber-input {
-    background: var(--black-void);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px) saturate(130%);
+    -webkit-backdrop-filter: blur(4px) saturate(130%);
     border: 1px solid var(--matrix-green);
     color: var(--matrix-green);
-    font-family: 'Share Tech Mono', monospace;
+    font-family: 'JetBrains Mono', 'Share Tech Mono', monospace;
     padding: 12px 16px;
     border-radius: 6px;
     transition: all 0.2s ease;
+    /* Ensure monospace for input fields */
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
   }
   
   .cyber-input:focus {
@@ -198,8 +341,8 @@ body {
   }
 }
 
-/* Matrix Rain Background - SUBTLE */
-.matrix-bg::before {
+/* Money Rain Background Enhancement */
+.money-rain-overlay::before {
   content: '';
   position: fixed;
   top: 0;
@@ -207,9 +350,9 @@ body {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(8, 145, 178, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(192, 132, 252, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(34, 197, 94, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(8, 145, 178, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(192, 132, 252, 0.02) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
 }
@@ -222,17 +365,24 @@ body {
 ::-webkit-scrollbar-track {
   background: var(--black-void);
   border: 1px solid var(--matrix-green);
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--matrix-green), var(--matrix-green-dark));
-  border-radius: 6px;
+  border-radius: 0;
   border: 1px solid var(--matrix-green);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--matrix-green-bright);
   box-shadow: 0 0 5px var(--matrix-green);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--black-void);
+  border: 1px solid var(--matrix-green);
+  border-radius: 0;
 }
 
 /* Progress Bar - Cyber Style */
@@ -259,8 +409,13 @@ body {
 @media (max-width: 640px) {
   .digital-display {
     font-size: 2rem;
-    letter-spacing: 2px;
+    letter-spacing: 0.1em;
     padding: 15px;
+  }
+  
+  .digital-clock-segments {
+    font-size: 2.5rem;
+    letter-spacing: 0.08em;
   }
   
   .cyber-button {
@@ -345,4 +500,59 @@ body {
     rgba(0, 0, 0, 0.05) 6px
   );
   pointer-events: none;
+}
+
+/* Money Rain Canvas Optimization */
+canvas {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimize-contrast;
+  backface-visibility: hidden;
+  perspective: 1000;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Performance optimizations for money rain */
+.money-rain-container {
+  will-change: transform;
+  contain: layout style paint;
+  isolation: isolate;
+}
+
+/* Additional glow effects for money symbols */
+@keyframes money-glow {
+  0%, 100% { 
+    text-shadow: 
+      0 0 5px var(--matrix-green),
+      0 0 10px var(--matrix-green),
+      0 0 15px var(--matrix-green);
+  }
+  50% { 
+    text-shadow: 
+      0 0 8px var(--matrix-green-bright),
+      0 0 15px var(--matrix-green-bright),
+      0 0 20px var(--matrix-green-bright);
+  }
+}
+
+/* SPECIAL UTILITY FOR ABSOLUTELY STABLE MONOSPACE NUMBERS */
+.timer-stable {
+  font-family: 'Electrolize', 'Courier New', monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: 0.15em;
+  text-align: center;
+  /* Ensure each character takes exactly the same width */
+  width: fit-content;
+  min-width: max-content;
+}
+
+.amount-stable {
+  font-family: 'Electrolize', 'Audiowide', monospace;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: 0.1em;
 }

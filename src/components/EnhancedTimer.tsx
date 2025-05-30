@@ -48,46 +48,14 @@ const StickyTimerHeader: React.FC<StickyTimerHeaderProps> = ({
   const currentEarnings = calculateEarnings(sessionSeconds, currentProject.rate);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[9999] bg-black/90 border-b border-matrix-500">
-      <div className="backdrop-blur-sm">
+    <div className="fixed top-0 left-0 right-0 z-[9999] border-b border-matrix-500" style={{background: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(8px) saturate(150%)'}}>
+      <div>
         <div className="container mx-auto px-4 py-3 max-w-6xl">
           {/* Mobile Layout */}
           <div className="flex sm:hidden items-center justify-between">
-            <div className="text-xl font-mono text-matrix-500" style={{ color: '#00ff00', textShadow: '0 0 10px #00ff00' }}>
+            <div className="text-2xl sm:text-3xl font-mono text-matrix-500" style={{ color: '#00ff00', textShadow: '0 0 10px #00ff00' }}>
               {formatTime(sessionSeconds)}
             </div>
-            <button
-              onClick={onToggle}
-              className={`rounded-full w-10 h-10 border-2 flex items-center justify-center transition-colors ${
-                isRunning 
-                  ? 'border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black' 
-                  : 'border-matrix-500 text-matrix-500 hover:bg-matrix-500 hover:text-black'
-              }`}
-            >
-              {isRunning ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
-            </button>
-          </div>
-          
-          {/* Desktop Layout - Left-aligned Timer */}
-          <div className="hidden sm:flex items-center justify-between">
-            {/* Left-aligned Timer & Earnings */}
-            <div className="flex items-center space-x-8">
-              <div 
-                className="text-4xl font-cyber font-black"
-                style={{ color: '#00ff00', textShadow: '0 0 10px #00ff00' }}
-              >
-                {formatTime(sessionSeconds)}
-              </div>
-              
-              <div className="text-right">
-                <div className="text-xl font-mono neon-cyan">
-                  ${currentEarnings.toFixed(2)}
-                </div>
-                <div className="text-sm text-matrix-600">SESSION</div>
-              </div>
-            </div>
-            
-            {/* Control Button */}
             <button
               onClick={onToggle}
               className={`rounded-full w-12 h-12 border-2 flex items-center justify-center transition-colors ${
@@ -97,6 +65,39 @@ const StickyTimerHeader: React.FC<StickyTimerHeaderProps> = ({
               }`}
             >
               {isRunning ? <Pause size={20} /> : <Play size={20} className="ml-0.5" />}
+            </button>
+          </div>
+          
+          {/* Desktop Layout - Left earnings, Center timer, Right button */}
+          <div className="hidden sm:flex items-center justify-between">
+            {/* Left-aligned Earnings */}
+            <div className="flex items-center space-x-3">
+              <div className="text-2xl lg:text-3xl font-mono neon-cyan">
+                ${currentEarnings.toFixed(2)}
+              </div>
+              <div className="text-base text-matrix-600">SESSION</div>
+            </div>
+            
+            {/* Center-aligned Timer */}
+            <div className="absolute left-1/2 transform -translate-x-1/2">
+              <div 
+                className="text-5xl lg:text-6xl font-mono font-black"
+                style={{ color: '#00ff00', textShadow: '0 0 10px #00ff00' }}
+              >
+                {formatTime(sessionSeconds)}
+              </div>
+            </div>
+            
+            {/* Control Button */}
+            <button
+              onClick={onToggle}
+              className={`rounded-full w-14 h-14 border-2 flex items-center justify-center transition-colors ${
+                isRunning 
+                  ? 'border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black' 
+                  : 'border-matrix-500 text-matrix-500 hover:bg-matrix-500 hover:text-black'
+              }`}
+            >
+              {isRunning ? <Pause size={24} /> : <Play size={24} className="ml-0.5" />}
             </button>
           </div>
         </div>
@@ -216,161 +217,78 @@ const EnhancedTimer: React.FC<EnhancedTimerProps> = ({
   return (
     <>
       <div className="relative mb-16">
+        {/* Standalone Timer Display */}
+        <div className="text-center mb-8">
+          <div className="digital-clock-segments">
+            {formatTime(displayTime)}
+          </div>
+        </div>
+        
+        {/* Pill-shaped Control Button - Below Timer */}
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={handleToggle}
+            disabled={!currentProject}
+            className={`group relative px-16 py-3 rounded-full text-lg font-mono font-bold tracking-wider transition-all duration-500 transform hover:scale-105 flex items-center space-x-3 ${
+              !currentProject 
+                ? 'border-2 border-terminal-medium text-terminal-medium cursor-not-allowed opacity-50 bg-black/20'
+                : isRunning 
+                  ? 'border-2 border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black animate-neon-pulse bg-black/40' 
+                  : 'border-2 border-matrix-500 text-matrix-500 hover:bg-matrix-500 hover:text-black bg-black/40'
+            }`}
+          >
+            <div className="relative z-10 transition-transform duration-300 group-hover:scale-110">
+              {isRunning ? <Pause size={20} /> : <Play size={20} className="ml-1" />}
+            </div>
+            <span className="relative z-10">
+              {isRunning ? 'PAUSE' : 'START'}
+            </span>
+          </button>
+        </div>
+        
+        {/* Project Selection Message - Only shown when no project */}
+        {!currentProject && (
+          <div className="p-6 sm:p-8 text-center border-2 border-matrix-500 terminal-window shadow-neon-green mb-8">
+            <p className="matrix-text font-mono font-bold tracking-wider text-lg sm:text-xl">
+              &gt; SELECT PROJECT TO INITIALIZE NEURAL INTERFACE_
+            </p>
+            <div className="text-sm text-matrix-600 mt-3 font-mono">
+              CONNECTION STATUS: STANDBY
+            </div>
+          </div>
+        )}
+        
+        {/* Earnings/Tax Data Section */}
         <div className="terminal-window overflow-hidden shadow-neon-green">
-          {/* Project Header */}
-          {currentProject ? (
-            <div className="bg-gradient-terminal p-6 relative overflow-hidden border-b-2 border-matrix-500">
-              {/* Scan line effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-matrix-500/20 to-transparent animate-scan-line"></div>
-              
-              <div className="relative z-10">
-                {/* Mobile: Stack everything */}
-                <div className="block sm:hidden space-y-6">
-                  {/* Project Info */}
-                  <div className="text-center">
-                    <h3 className="text-2xl font-cyber font-black matrix-text mb-2 glitch-text">
-                      {currentProject.name.toUpperCase()}
-                    </h3>
-                    <p className="neon-cyan text-sm font-mono tracking-wider">
-                      RATE: ${currentProject.rate}/HR
-                    </p>
-                  </div>
-                  
-                  {/* Control Button - Cyber Style */}
-                  <div className="flex justify-center py-4">
-                    <button
-                      onClick={handleToggle}
-                      disabled={!currentProject}
-                      className={`group relative cyber-button w-20 h-20 rounded-full text-2xl transition-all duration-500 transform hover:scale-110 ${
-                        !currentProject 
-                          ? 'border-terminal-medium text-terminal-medium cursor-not-allowed opacity-50'
-                          : isRunning 
-                            ? 'border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black animate-neon-pulse' 
-                            : 'border-matrix-500 text-matrix-500 hover:bg-matrix-500 hover:text-black'
-                      }`}
-                    >
-                      <div className="relative z-10 transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
-                        {isRunning ? <Pause size={24} /> : <Play size={24} className="ml-0.5" />}
-                      </div>
-                    </button>
-                  </div>
-                  
-                  {/* View Toggle - Cyber Switch */}
-                  <div className="flex justify-center">
-                    <div className="flex items-center space-x-4">
-                      <span className={`text-sm font-mono font-bold transition-colors ${
-                        !showTotal ? 'matrix-text' : 'text-matrix-600'
-                      }`}>SESSION</span>
-                      <button
-                        onClick={() => setShowTotal(!showTotal)}
-                        className={`relative inline-flex h-8 w-16 items-center rounded-full border-2 transition-colors focus:outline-none ${
-                          showTotal ? 'border-cyber-cyan bg-cyber-cyan/20' : 'border-matrix-500 bg-matrix-500/20'
-                        }`}
-                      >
-                        <span
-                          className={`inline-block h-6 w-6 transform rounded-full transition-transform ${
-                            showTotal ? 'translate-x-8 bg-cyber-cyan shadow-neon-cyan' : 'translate-x-1 bg-matrix-500 shadow-neon-green'
-                          }`}
-                        />
-                      </button>
-                      <span className={`text-sm font-mono font-bold transition-colors ${
-                        showTotal ? 'neon-cyan' : 'text-matrix-600'
-                      }`}>TOTAL</span>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Desktop: Matrix grid layout */}
-                <div className="hidden sm:flex items-center justify-between">
-                  <div>
-                    <h3 className="text-3xl font-cyber font-black matrix-text mb-2 glitch-text">
-                      {currentProject.name.toUpperCase()}
-                    </h3>
-                    <p className="neon-cyan text-sm font-mono tracking-wider">
-                      RATE: ${currentProject.rate}/HR
-                    </p>
-                  </div>
-                  
-                  {/* Control Button - Centered */}
-                  <div className="absolute left-1/2 transform -translate-x-1/2">
-                    <button
-                      onClick={handleToggle}
-                      disabled={!currentProject}
-                      className={`group relative cyber-button w-24 h-24 rounded-full text-2xl transition-all duration-500 transform hover:scale-110 ${
-                        !currentProject 
-                          ? 'border-terminal-medium text-terminal-medium cursor-not-allowed opacity-50'
-                          : isRunning 
-                            ? 'border-cyber-red text-cyber-red hover:bg-cyber-red hover:text-black animate-neon-pulse' 
-                            : 'border-matrix-500 text-matrix-500 hover:bg-matrix-500 hover:text-black'
-                      }`}
-                    >
-                      <div className="relative z-10 transition-transform duration-300 group-hover:scale-110 flex items-center justify-center">
-                        {isRunning ? <Pause size={28} /> : <Play size={28} className="ml-0.5" />}
-                      </div>
-                    </button>
-                  </div>
-                  
-                  {/* View Toggle - Cyber Switch */}
-                  <div className="flex items-center space-x-4">
-                    <span className={`text-sm font-mono font-bold transition-colors ${
-                      !showTotal ? 'matrix-text' : 'text-matrix-600'
-                    }`}>SESSION</span>
-                    <button
-                      onClick={() => setShowTotal(!showTotal)}
-                      className={`relative inline-flex h-8 w-16 items-center rounded-full border-2 transition-colors focus:outline-none ${
-                        showTotal ? 'border-cyber-cyan bg-cyber-cyan/20' : 'border-matrix-500 bg-matrix-500/20'
-                      }`}
-                    >
-                      <span
-                        className={`inline-block h-6 w-6 transform rounded-full transition-transform ${
-                          showTotal ? 'translate-x-8 bg-cyber-cyan shadow-neon-cyan' : 'translate-x-1 bg-matrix-500 shadow-neon-green'
-                        }`}
-                      />
-                    </button>
-                    <span className={`text-sm font-mono font-bold transition-colors ${
-                      showTotal ? 'neon-cyan' : 'text-matrix-600'
-                    }`}>TOTAL</span>
-                  </div>
+          <div className="p-6 sm:p-8 lg:p-10">
+            {/* Project Info Header */}
+            {currentProject && (
+              <div className="mb-8 p-4 border-2 border-matrix-500 terminal-window bg-black/30">
+                <div className="text-center">
+                  <h2 className="text-lg font-cyber font-black matrix-text tracking-wider mb-2">
+                    {currentProject.name.toUpperCase()}
+                  </h2>
+                  <p className="neon-cyan text-sm font-mono tracking-wider">
+                    RATE: ${currentProject.rate}/HR
+                  </p>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div className="bg-gradient-terminal p-6 text-center border-b-2 border-matrix-500">
-              <p className="matrix-text font-mono font-bold tracking-wider">
-                &gt; SELECT PROJECT TO INITIALIZE NEURAL INTERFACE_
-              </p>
-              <div className="text-xs text-matrix-600 mt-2 font-mono">
-                CONNECTION STATUS: STANDBY
-              </div>
-            </div>
-          )}
-          
-          {/* Main Timer Content - Digital Display */}
-          <div className="p-6 bg-terminal-dark">
-            {/* Massive Digital Timer Display */}
-            <div className="text-center mb-8">
-              <div className="digital-display text-5xl sm:text-7xl md:text-8xl font-cyber font-black leading-none mb-4">
-                {formatTime(displayTime)}
-              </div>
-              <div className="text-sm font-mono text-matrix-600 tracking-widest">
-                {showTotal ? '&gt; TOTAL_TIME.LOG' : '&gt; CURRENT_SESSION.EXE'}
-              </div>
-            </div>
+            )}
             
             {/* Cyber Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Current Session Earnings */}
-              <div className="cyber-card p-6 text-center sm:col-span-2 lg:col-span-1">
-                <div className="flex items-center justify-center mb-3">
-                  <Zap className="w-5 h-5 text-matrix-500 mr-2 animate-pulse" />
-                  <span className="text-sm font-mono text-matrix-600 tracking-wider">
+              <div className="cyber-card p-6 sm:p-8 text-center sm:col-span-2 lg:col-span-1">
+                <div className="flex items-center justify-center mb-4">
+                  <Zap className="w-6 h-6 text-matrix-500 mr-2 animate-pulse" />
+                  <span className="text-base font-mono text-matrix-600 tracking-wider">
                     EARNINGS
                   </span>
                 </div>
-                <div className="text-2xl sm:text-3xl font-cyber font-black neon-cyan mb-2">
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-cyber font-black neon-cyan mb-3">
                   ${displayEarnings.toFixed(2)}
                 </div>
-                <div className="text-xs font-mono text-matrix-700">
+                <div className="text-sm font-mono text-matrix-700">
                   {showTotal ? 'TOTAL ACCUMULATED' : 'CURRENT SESSION'}
                 </div>
               </div>
@@ -378,63 +296,81 @@ const EnhancedTimer: React.FC<EnhancedTimerProps> = ({
               {/* Tax Information */}
               {taxSettings.includeInDisplays && currentProject ? (
                 <>
-                  <div className="cyber-card p-6 text-center">
-                    <div className="flex items-center justify-center mb-3">
-                      <Calculator className="w-5 h-5 text-cyber-red mr-2 animate-pulse" />
-                      <span className="text-sm font-mono text-matrix-600 tracking-wider">
+                  <div className="cyber-card p-6 sm:p-8 text-center">
+                    <div className="flex items-center justify-center mb-4">
+                      <Calculator className="w-6 h-6 text-cyber-red mr-2 animate-pulse" />
+                      <span className="text-base font-mono text-matrix-600 tracking-wider">
                         TAX.SYS
                       </span>
                     </div>
-                    <div className="text-2xl sm:text-3xl font-cyber font-black text-cyber-red mb-2">
+                    <div className="text-3xl sm:text-4xl lg:text-5xl font-cyber font-black text-cyber-red mb-3">
                       ${taxCalc.taxAmount.toFixed(2)}
                     </div>
-                    <div className="text-xs font-mono text-red-400">
+                    <div className="text-sm font-mono text-red-400">
                       EST. TAXES ({taxSettings.taxRate}%)
                     </div>
                   </div>
-                  <div className="cyber-card p-6 text-center">
-                    <div className="flex items-center justify-center mb-3">
-                      <Activity className="w-5 h-5 text-matrix-500 mr-2 animate-pulse" />
-                      <span className="text-sm font-mono text-matrix-600 tracking-wider">
+                  <div className="cyber-card p-6 sm:p-8 text-center">
+                    <div className="flex items-center justify-center mb-4">
+                      <Activity className="w-6 h-6 text-matrix-500 mr-2 animate-pulse" />
+                      <span className="text-base font-mono text-matrix-600 tracking-wider">
                         NET.EXE
                       </span>
                     </div>
-                    <div className="text-2xl sm:text-3xl font-cyber font-black neon-cyan mb-2">
+                    <div className="text-3xl sm:text-4xl lg:text-5xl font-cyber font-black neon-cyan mb-3">
                       ${taxCalc.netEarnings.toFixed(2)}
                     </div>
-                    <div className="text-xs font-mono text-matrix-700">
+                    <div className="text-sm font-mono text-matrix-700">
                       AFTER TAX DEDUCTION
                     </div>
                   </div>
                 </>
               ) : (
-                <div className="sm:col-span-2 lg:col-span-2 cyber-card p-6 text-center opacity-50">
-                  <div className="flex items-center justify-center mb-3">
-                    <Calculator className="w-5 h-5 text-terminal-medium mr-2" />
-                    <span className="text-sm font-mono text-terminal-medium tracking-wider">
+                <div className="sm:col-span-2 lg:col-span-2 cyber-card p-6 sm:p-8 text-center opacity-50">
+                  <div className="flex items-center justify-center mb-4">
+                    <Calculator className="w-6 h-6 text-terminal-medium mr-2" />
+                    <span className="text-base font-mono text-terminal-medium tracking-wider">
                       TAX.SYS [DISABLED]
                     </span>
                   </div>
-                  <div className="text-terminal-medium font-mono text-sm">
+                  <div className="text-terminal-medium font-mono text-base">
                     &gt; ENABLE TAX CALCULATIONS IN SETTINGS
                   </div>
                 </div>
               )}
             </div>
             
+            {/* View Toggle - Bottom Section */}
+            <div className="mt-10 mb-6 flex justify-center">
+              <div className="flex items-center space-x-6">
+                <span className={`text-base sm:text-lg font-mono font-bold transition-colors ${
+                  !showTotal ? 'matrix-text' : 'text-matrix-600'
+                }`}>SESSION</span>
+                <button
+                  onClick={() => setShowTotal(!showTotal)}
+                  className={`relative inline-flex h-10 w-20 items-center rounded-full border-2 transition-colors focus:outline-none ${
+                    showTotal ? 'border-cyber-cyan bg-cyber-cyan/20' : 'border-matrix-500 bg-matrix-500/20'
+                  }`}
+                >
+                  <span
+                    className={`inline-block h-8 w-8 transform rounded-full transition-transform ${
+                      showTotal ? 'translate-x-10 bg-cyber-cyan shadow-neon-cyan' : 'translate-x-1 bg-matrix-500 shadow-neon-green'
+                    }`}
+                  />
+                </button>
+                <span className={`text-base sm:text-lg font-mono font-bold transition-colors ${
+                  showTotal ? 'neon-cyan' : 'text-matrix-600'
+                }`}>TOTAL</span>
+              </div>
+            </div>
+            
             {/* Status Bar */}
-            <div className="mt-8 p-4 border-2 border-matrix-800 rounded bg-terminal-black">
-              <div className="flex items-center justify-between text-xs font-mono text-matrix-600">
+            <div className="mt-6 p-4 sm:p-6 border-2 border-matrix-800 rounded" style={{background: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(3px)'}}>
+              <div className="flex items-center justify-between text-sm sm:text-base font-mono text-matrix-600 flex-wrap gap-4">
                 <div className="flex items-center space-x-4">
                   <span>STATUS:</span>
                   <span className={isRunning ? 'text-matrix-500 animate-pulse' : 'text-cyber-yellow'}>
                     {isRunning ? 'ACTIVE' : 'STANDBY'}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <span>PROJECT:</span>
-                  <span className="neon-cyan">
-                    {currentProject ? currentProject.name.toUpperCase() : 'NULL'}
                   </span>
                 </div>
                 <div className="flex items-center space-x-4">

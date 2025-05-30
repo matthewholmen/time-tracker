@@ -86,7 +86,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
 
       {/* Export Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300 transform hover:scale-105">
+        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300">
           <div className="flex items-center space-x-3 mb-3">
             <FileText className="w-5 h-5 text-matrix-500 animate-pulse" />
             <span className="font-mono font-bold text-matrix-600 tracking-wider text-sm">SESSIONS</span>
@@ -95,7 +95,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
           <p className="text-xs text-matrix-700 font-mono mt-1">TOTAL_COUNT</p>
         </div>
         
-        <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300 transform hover:scale-105">
+        <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300">
           <div className="flex items-center space-x-3 mb-3">
             <BarChart3 className="w-5 h-5 text-cyber-cyan animate-pulse" />
             <span className="font-mono font-bold text-cyan-400 tracking-wider text-sm">TIME_LOG</span>
@@ -104,7 +104,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
           <p className="text-xs text-cyan-300 font-mono mt-1">ACCUMULATED</p>
         </div>
         
-        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300 transform hover:scale-105">
+        <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300">
           <div className="flex items-center space-x-3 mb-3">
             <Zap className="w-5 h-5 text-matrix-500 animate-pulse" />
             <span className="font-mono font-bold text-matrix-600 tracking-wider text-sm">EARNINGS</span>
@@ -125,7 +125,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Detailed Time Blocks Export */}
-          <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300 transform hover:scale-105">
+          <div className="cyber-card p-6 hover:border-matrix-500 transition-all duration-300">
             <div className="flex items-center space-x-4 mb-6">
               <div className="p-3 border-2 border-matrix-500 rounded-lg bg-matrix-500/20">
                 <FileText size={24} className="text-matrix-500" />
@@ -158,7 +158,7 @@ const ExportManager: React.FC<ExportManagerProps> = ({ projects, taxSettings }) 
           </div>
 
           {/* Project Summary Export */}
-          <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300 transform hover:scale-105">
+          <div className="cyber-card p-6 hover:border-cyber-cyan transition-all duration-300">
             <div className="flex items-center space-x-4 mb-6">
               <div className="p-3 border-2 border-cyber-cyan rounded-lg bg-cyber-cyan/20">
                 <BarChart3 size={24} className="text-cyber-cyan" />

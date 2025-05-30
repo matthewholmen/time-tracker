@@ -45,7 +45,7 @@ const TaxSettingsComponent: React.FC<TaxSettingsComponentProps> = ({
   const sampleTaxCalc = calculateTax(sampleEarnings, taxSettings);
 
   return (
-    <div className="terminal-window shadow-neon-purple p-6 mb-12 animate-fade-in">
+    <div className="mb-12 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center space-x-3">
@@ -61,9 +61,13 @@ const TaxSettingsComponent: React.FC<TaxSettingsComponentProps> = ({
         </div>
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className={`cyber-button p-3 border-cyber-purple text-cyber-purple hover:bg-cyber-purple hover:text-black transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`}
+          className="text-cyber-purple hover:text-purple-400 transition-colors p-2 rounded-lg border border-cyber-purple/30 hover:border-cyber-purple/60"
+          title={isExpanded ? 'Collapse settings' : 'Expand settings'}
         >
-          <Settings size={18} />
+          <div className="flex items-center space-x-2 text-sm font-mono">
+            <Settings size={18} className={isExpanded ? 'animate-pulse' : ''} />
+            <span className="hidden sm:inline font-bold tracking-wider">{isExpanded ? 'COLLAPSE' : 'EXPAND'}</span>
+          </div>
         </button>
       </div>
 
@@ -178,7 +182,7 @@ const TaxSettingsComponent: React.FC<TaxSettingsComponentProps> = ({
                   <button
                     key={index}
                     onClick={() => handleRateChange(preset.rate)}
-                    className={`cyber-button p-4 text-left transition-all duration-300 hover:scale-105 ${
+                    className={`p-4 text-left transition-all duration-300 border rounded-lg ${
                       Math.abs(taxSettings.taxRate - preset.rate) < 0.1
                         ? 'border-cyber-purple text-cyber-purple bg-cyber-purple/20 animate-neon-pulse'
                         : 'border-terminal-medium text-matrix-600 hover:border-cyber-purple hover:text-cyber-purple'
